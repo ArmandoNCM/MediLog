@@ -14,6 +14,10 @@ public class Client extends Person {
 	
 	private Location city;
 	
+	private String address;
+	
+	private String phone;
+	
 	private List<Trauma> traumaRecords;
 	
 	private List<Habit> habits;
@@ -60,6 +64,22 @@ public class Client extends Person {
 
 	public void setCity(Location city) {
 		this.city = city;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public List<Trauma> getTraumaRecords() {

@@ -11,6 +11,11 @@ import persistence.Database;
 
 public class PersonPersistence {
 	
+	private static final String EXISTS_QUERY = 
+			"SELECT COUNT(id_person) AS exists" + 
+			"FROM person" + 
+			"WHERE id_person = ?";
+	
 	private static final String INSERT_QUERY = 
 			"INSERT INTO person"
 			+ "("
@@ -24,7 +29,7 @@ public class PersonPersistence {
 			+ ")"
 			+ "VALUES(?,?,?,?,?,?,?)";
 	
-	private static final String LOAD_QUERY = 
+	private static final String SELECT_QUERY = 
 			"SELECT" + 
 			"    first_name," + 
 			"    last_name," + 
@@ -55,7 +60,7 @@ public class PersonPersistence {
 	public static boolean loadPerson(Person person) throws SQLException {
 		
 		// Create prepared statement with parameterized query
-		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(LOAD_QUERY);
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_QUERY);
 		// Set query parameters
 		preparedStatement.setString(1, person.getId());
 		// Execute query
@@ -82,6 +87,19 @@ public class PersonPersistence {
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean personExists(String personId) throws SQLException {
+
+		// Create prepared statement with parameterized query
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(EXISTS_QUERY);
+		// Set query parameters
+		preparedStatement.setString(1, personId);
+		//Execute query
+		ResultSet resultSet = preparedStatement.executeQuery();
+		// Go to first and only result record
+		return resultSet.first() && resultSet.getInt(1) == 1;
+		
 	}
 
 }

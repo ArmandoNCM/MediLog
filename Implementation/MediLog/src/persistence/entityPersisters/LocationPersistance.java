@@ -9,7 +9,7 @@ import persistence.Database;
 
 public class LocationPersistance {
 	
-	private static final String LOAD_QUERY = 
+	private static final String SELECT_QUERY = 
 			"SELECT " + 
 			"    country.id_country AS country_id," + 
 			"    country.name AS country," + 
@@ -26,7 +26,7 @@ public class LocationPersistance {
 	public static Location loadLocation(int cityId) throws SQLException {
 		
 		// Create prepared statement with parameterized query
-		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(LOAD_QUERY);
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_QUERY);
 		// Set query parameters
 		preparedStatement.setInt(1, cityId);
 		// Execute query
