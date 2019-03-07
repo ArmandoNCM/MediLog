@@ -1,6 +1,6 @@
 package entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Trauma {
 	
@@ -10,9 +10,9 @@ public class Trauma {
 	
 	private String sequels;
 	
-	private Date occurrenceDate;
+	private LocalDate occurrenceDate;
 	
-	private Date registeredOn;
+	private LocalDate registeredOn;
 
 	public int getId() {
 		return id;
@@ -38,19 +38,19 @@ public class Trauma {
 		this.sequels = sequels;
 	}
 
-	public Date getOccurrenceDate() {
+	public LocalDate getOccurrenceDate() {
 		return occurrenceDate;
 	}
 
-	public void setOccurrenceDate(Date occurrenceDate) {
+	public void setOccurrenceDate(LocalDate occurrenceDate) {
 		this.occurrenceDate = occurrenceDate;
 	}
 
-	public Date getRegisteredOn() {
+	public LocalDate getRegisteredOn() {
 		return registeredOn;
 	}
 
-	public void setRegisteredOn(Date registeredOn) {
+	public void setRegisteredOn(LocalDate registeredOn) {
 		this.registeredOn = registeredOn;
 	}
 

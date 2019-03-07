@@ -1,6 +1,6 @@
 package entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class InformedConsent {
@@ -23,7 +23,7 @@ public class InformedConsent {
 	
 	private boolean workInHeights;
 	
-	private Date date;
+	private LocalDate date;
 	
 	private List<ProfessionalRisk> professionalRisks;
 	
@@ -105,11 +105,11 @@ public class InformedConsent {
 		this.workInHeights = workInHeights;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

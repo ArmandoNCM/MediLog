@@ -1,6 +1,6 @@
 package entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class MedicalCase {
 
@@ -10,7 +10,7 @@ public class MedicalCase {
 	
 	private char backgroundType;
 	
-	private Date registeredOn;
+	private LocalDate registeredOn;
 
 	public int getId() {
 		return id;
@@ -36,11 +36,11 @@ public class MedicalCase {
 		this.backgroundType = backgroundType;
 	}
 
-	public Date getRegisteredOn() {
+	public LocalDate getRegisteredOn() {
 		return registeredOn;
 	}
 
-	public void setRegisteredOn(Date registeredOn) {
+	public void setRegisteredOn(LocalDate registeredOn) {
 		this.registeredOn = registeredOn;
 	}
 	

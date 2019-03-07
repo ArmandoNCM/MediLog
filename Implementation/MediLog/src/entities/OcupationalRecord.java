@@ -1,6 +1,6 @@
 package entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class OcupationalRecord {
 	
@@ -8,15 +8,15 @@ public class OcupationalRecord {
 	
 	private String role;
 	
-	private Date startDate;
+	private LocalDate startDate;
 	
-	private Date endDate;
+	private LocalDate endDate;
 	
 	private String companyId;
 	
 	private Company company;
 	
-	private Date registeredOn;
+	private LocalDate registeredOn;
 
 	public int getId() {
 		return id;
@@ -34,19 +34,19 @@ public class OcupationalRecord {
 		this.role = role;
 	}
 
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
@@ -66,11 +66,11 @@ public class OcupationalRecord {
 		this.company = company;
 	}
 
-	public Date getRegisteredOn() {
+	public LocalDate getRegisteredOn() {
 		return registeredOn;
 	}
 
-	public void setRegisteredOn(Date registeredOn) {
+	public void setRegisteredOn(LocalDate registeredOn) {
 		this.registeredOn = registeredOn;
 	}
 

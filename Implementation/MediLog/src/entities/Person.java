@@ -1,6 +1,6 @@
 package entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public abstract class Person {
 
@@ -10,7 +10,7 @@ public abstract class Person {
 	
 	private String lastName;
 	
-	private Date birthDate;
+	private LocalDate birthDate;
 	
 	private int expeditionCityId;
 	
@@ -44,11 +44,11 @@ public abstract class Person {
 		this.lastName = lastName;
 	}
 
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
