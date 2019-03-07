@@ -12,9 +12,9 @@ public abstract class Person {
 	
 	private LocalDate birthDate;
 	
-	private int expeditionCityId;
+	private int idExpeditionCityId;
 	
-	private Location expeditionCity;
+	private Location idExpeditionCity;
 	
 	private char identificationType;
 	
@@ -52,20 +52,20 @@ public abstract class Person {
 		this.birthDate = birthDate;
 	}
 
-	public int getExpeditionCityId() {
-		return expeditionCityId;
+	public int getIdExpeditionCityId() {
+		return idExpeditionCityId;
 	}
 
-	public void setExpeditionCityId(int expeditionCityId) {
-		this.expeditionCityId = expeditionCityId;
+	public void setIdExpeditionCityId(int expeditionCityId) {
+		this.idExpeditionCityId = expeditionCityId;
 	}
 
-	public Location getExpeditionCity() {
-		return expeditionCity;
+	public Location getIdExpeditionCity() {
+		return idExpeditionCity;
 	}
 
-	public void setExpeditionCity(Location expeditionCity) {
-		this.expeditionCity = expeditionCity;
+	public void setIdExpeditionCity(Location expeditionCity) {
+		this.idExpeditionCity = expeditionCity;
 	}
 
 	public char getIdentificationType() {
