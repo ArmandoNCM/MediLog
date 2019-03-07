@@ -36,7 +36,7 @@ public class PersonPersistence {
 		preparedStatement.setString(6, String.valueOf(person.getIdentificationType()));
 		preparedStatement.setString(7, String.valueOf(person.getGender()));
 		// Execute query
-		return preparedStatement.execute();
+		return preparedStatement.executeUpdate() == 1;
 	}
 
 }
