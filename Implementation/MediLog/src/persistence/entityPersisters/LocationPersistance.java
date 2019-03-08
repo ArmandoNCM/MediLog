@@ -11,16 +11,16 @@ public class LocationPersistance {
 	
 	private static final String SELECT_QUERY = 
 			"SELECT " + 
-			"    country.id_country AS country_id," + 
-			"    country.name AS country," + 
-			"    state_province.id_state_province AS state_province_id," + 
-			"    state_province.name AS state_province," + 
-			"    city.name AS city" + 
-			"FROM city" + 
-			"INNER JOIN state_province" + 
-			"    ON city.state_province = state_province.id_state_province" + 
-			"INNER JOIN country" + 
-			"    ON state_province.country = country.id_country" + 
+			"    country.id_country AS country_id, " + 
+			"    country.name AS country, " + 
+			"    state_province.id_state_province AS state_province_id, " + 
+			"    state_province.name AS state_province, " + 
+			"    city.name AS city " + 
+			"FROM city " + 
+			"INNER JOIN state_province " + 
+			"    ON city.state_province = state_province.id_state_province " + 
+			"INNER JOIN country " + 
+			"    ON state_province.country = country.id_country " + 
 			"WHERE city.id_city = ?";
 	
 	public static Location loadLocation(int cityId) throws SQLException {

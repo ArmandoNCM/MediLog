@@ -10,7 +10,7 @@ import util.PropertiesUtil;
 
 public class Database {
 	
-	private static final String DATABASE_CONNECTION_URL = "jdbc:mysql://localhost/test";
+	private static final String DATABASE_CONNECTION_URL = "jdbc:mysql://localhost/medi_log";
 
 	private Connection connection;
 	

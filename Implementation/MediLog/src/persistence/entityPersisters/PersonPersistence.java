@@ -12,36 +12,36 @@ import persistence.Database;
 public class PersonPersistence {
 	
 	private static final String EXISTS_QUERY = 
-			"SELECT COUNT(id_person) AS exists" + 
-			"FROM person" + 
+			"SELECT COUNT(id_person) AS exists " + 
+			"FROM person " + 
 			"WHERE id_person = ?";
 	
 	private static final String INSERT_QUERY = 
-			"INSERT INTO person"
-			+ "("
-				+ "id_person,"
-				+ "first_name,"
-				+ "last_name,"
-				+ "birth_date,"
-				+ "id_expedition_city,"
-				+ "identification_type,"
-				+ "gender"
-			+ ")"
+			"INSERT INTO person "
+			+ "( "
+				+ "id_person, "
+				+ "first_name, "
+				+ "last_name, "
+				+ "birth_date, "
+				+ "id_expedition_city, "
+				+ "identification_type, "
+				+ "gender "
+			+ ") "
 			+ "VALUES(?,?,?,?,?,?,?)";
 	
 	private static final String SELECT_QUERY = 
-			"SELECT" + 
-			"    first_name," + 
-			"    last_name," + 
-			"    birth_date," + 
-			"    id_expedition_city," + 
-			"    identification_type," + 
-			"    gender" + 
-			"FROM person" + 
-			"WHERE id_person = ?";
+			"SELECT " + 
+			"    first_name, " + 
+			"    last_name, " + 
+			"    birth_date, " + 
+			"    id_expedition_city, " + 
+			"    identification_type, " + 
+			"    gender " + 
+			"FROM person " + 
+			"WHERE id_person = ? ";
 
 	
-	public static boolean savePerson(Person person) throws SQLException {
+	static boolean savePerson(Person person) throws SQLException {
 		
 		// Create prepared statement with parameterized insert query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
@@ -57,7 +57,7 @@ public class PersonPersistence {
 		return preparedStatement.executeUpdate() == 1;
 	}
 	
-	public static boolean loadPerson(Person person) throws SQLException {
+	static boolean loadPerson(Person person) throws SQLException {
 		
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_QUERY);

@@ -10,27 +10,27 @@ import persistence.Database;
 public class ClientPersistence {
 	
 	private static final String SELECT_QUERY = 
-			"SELECT" + 
-			"    city," + 
-			"    academic_level," + 
-			"    social_level," + 
-			"    civil_status," + 
-			"    address," + 
-			"    phone" + 
-			"FROM client" + 
+			"SELECT " + 
+			"    city, " + 
+			"    academic_level, " + 
+			"    social_level, " + 
+			"    civil_status, " + 
+			"    address, " + 
+			"    phone " + 
+			"FROM client " + 
 			"WHERE id_client = ?";
 	
 	private static final String INSERT_QUERY =
-			"INSERT INTO client" + 
-			"    (" + 
-			"        id_client," + 
-			"        city," + 
-			"        academic_level," + 
-			"        social_level," + 
-			"        civil_status," + 
-			"        address," + 
-			"        phone" + 
-			"    )" + 
+			"INSERT INTO client " + 
+			"    ( " + 
+			"        id_client, " + 
+			"        city, " + 
+			"        academic_level, " + 
+			"        social_level, " + 
+			"        civil_status, " + 
+			"        address, " + 
+			"        phone " + 
+			"    ) " + 
 			"VALUES(?,?,?,?,?,?,?)";
 	
 	
@@ -54,6 +54,7 @@ public class ClientPersistence {
 			
 			// Instantiate Client object
 			Client client = new Client();
+			client.setId(clientId);
 			client.setCityId(cityId);
 			client.setCity(LocationPersistance.loadLocation(cityId));
 			client.setAcademicLevel(academicLevel);

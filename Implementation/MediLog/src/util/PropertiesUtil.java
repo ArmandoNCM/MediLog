@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class PropertiesUtil {
 	
-	public static final String DATABASE_PROPERTIES_FILEPATH = "./database_connection.properties"; // TODO Configure for production environment
+	public static final String DATABASE_PROPERTIES_FILEPATH = "./data/database_connection.properties"; // TODO Configure for production environment
 	
 	public static Properties loadProperties(String propertiesPath) throws IOException {
 		
