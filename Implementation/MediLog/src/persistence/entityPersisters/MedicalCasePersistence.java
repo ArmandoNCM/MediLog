@@ -13,7 +13,7 @@ import persistence.Database;
 
 public class MedicalCasePersistence {
 	
-	private static final String SELECT_MEDICAL_CASES_QUERY = 
+	private static final String SELECT_CLIENT_MEDICAL_CASES_QUERY = 
 			"SELECT " + 
 			"    medical_case_type.id_medical_case_type, " + 
 			"    medical_case_type.name, " + 
@@ -32,7 +32,7 @@ public class MedicalCasePersistence {
 	
 	public static List<MedicalCase> getClientMedicalCases(String clientId) throws SQLException {
 		// Create prepared statement with parameterized query
-		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_MEDICAL_CASES_QUERY);
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_CLIENT_MEDICAL_CASES_QUERY);
 		// Set query parameters
 		preparedStatement.setString(1, clientId);
 		// Execute query
