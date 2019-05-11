@@ -1,5 +1,6 @@
 package persistence.entityPersisters;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,14 +29,13 @@ public class TraumaPersistence {
 	private static final String INSERT_QUERY = 
 			"INSERT INTO trauma_history " + 
 			"	( " + 
-			"		id_trauma_history, " + 
 			"		client, " + 
 			"		trauma_nature, " + 
 			"		sequels, " + 
 			"		ocurrence_date, " + 
 			"		registered_on " +
 			"	) " + 
-			"VALUES(?,?,?,?,?,?)";
+			"VALUES(?,?,?,?,?)";
 	
 	public static List<Trauma> loadTraumas(String clientId) throws SQLException {
 		// Create prepared statement with parameterized query
@@ -70,6 +70,19 @@ public class TraumaPersistence {
 		return traumas;
 	}
 			
-	
+	public static boolean saveTrauma(String clientId, Trauma trauma) throws SQLException {
+		
+		// Create prepared statement with parameterized query
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
+		// Set query parameters
+		preparedStatement.setString(1, clientId);
+		preparedStatement.setString(2, trauma.getTraumaNature());
+		preparedStatement.setString(3, trauma.getSequels());
+		preparedStatement.setDate(4, Date.valueOf(trauma.getOccurrenceDate()));
+		preparedStatement.setDate(5, Date.valueOf(trauma.getRegisteredOn()));
+		
+		return preparedStatement.executeUpdate() == 1;		
+		
+	}
 
 }
