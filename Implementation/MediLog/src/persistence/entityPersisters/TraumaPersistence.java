@@ -52,7 +52,7 @@ public class TraumaPersistence {
 			int traumaId = resultSet.getInt(1);
 			String traumaNature = resultSet.getString(2);
 			String sequels = resultSet.getString(3);
-			LocalDate occurrenceDate = resultSet.getDate(4).toLocalDate();
+			LocalDate occurrenceDate = resultSet.getDate(4) != null ? resultSet.getDate(4).toLocalDate() : null;
 			LocalDate registeredOn = resultSet.getDate(5).toLocalDate();
 			
 			// Instantiate the Trauma object
@@ -78,7 +78,7 @@ public class TraumaPersistence {
 		preparedStatement.setString(1, clientId);
 		preparedStatement.setString(2, trauma.getTraumaNature());
 		preparedStatement.setString(3, trauma.getSequels());
-		preparedStatement.setDate(4, Date.valueOf(trauma.getOccurrenceDate()));
+		preparedStatement.setDate(4, trauma.getOccurrenceDate() != null ? Date.valueOf(trauma.getOccurrenceDate()) : null);
 		preparedStatement.setDate(5, Date.valueOf(trauma.getRegisteredOn()));
 		
 		return preparedStatement.executeUpdate() == 1;		
