@@ -1,5 +1,6 @@
 package persistence.entityPersisters;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,15 +23,34 @@ public class HabitPersistence {
 			"FROM habit " + 
 			"JOIN client_habit " + 
 			"    ON habit.id_habit = client_habit.habit " + 
-			"WHERE client_habit.client = ?";
+			"WHERE client_habit.client = ? " +
+			"ORDER BY client_habit.registered_on ASC";
 	
 	private static final String SELECT_HABITS_QUERY = 
 			"SELECT " + 
 			"    id_habit, " + 
 			"    description " + 
-			"FROM habit";
+			"FROM habit " +
+			"ORDER BY description ASC";
 	
-	public static List<Habit> getClientHabits(String clientId) throws SQLException {
+	private static final String INSERT_HABIT_QUERY =
+			"INSERT INTO habit " + 
+			"    ( " + 
+			"        description " + 
+			"    ) " + 
+			"VALUES (?)";
+	
+	private static final String INSERT_CLIENT_HABIT_QUERY = 
+			"INSERT INTO client_habit " + 
+			"    ( " + 
+			"        client, " + 
+			"        habit, " + 
+			"        weekly_hours_intensity, " + 
+			"        registered_on " + 
+			"    ) " + 
+			"VALUES (?, ?, ?, ?)";
+	
+	public static List<Habit> loadClientHabits(String clientId) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_CLIENT_HABITS_QUERY);
 		// Set query parameters
@@ -58,7 +78,7 @@ public class HabitPersistence {
 		return habits;
 	}
 	
-	public static List<Habit> getHabitTypes() throws SQLException {
+	public static List<Habit> loadHabitTypes() throws SQLException {
 		// Create a simple statement and run query
 		Statement statement = Database.getInstance().getConnection().createStatement();
 		ResultSet resultSet = statement.executeQuery(SELECT_HABITS_QUERY);
@@ -76,6 +96,27 @@ public class HabitPersistence {
 			habits.add(habit);
 		}
 		return habits;
+	}
+	
+	public static boolean saveHabitType(String habitDescription) throws SQLException {
+		// Create prepared statement with parameterized query
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_HABIT_QUERY);
+		// Set query parameters
+		preparedStatement.setString(1, habitDescription);
+		// Execute query
+		return preparedStatement.executeUpdate() == 1;
+	}
+	
+	public static boolean saveClientHabit(String clientId, Habit habit) throws SQLException {
+		// Create prepared statement with parameterized query
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_CLIENT_HABIT_QUERY);
+		// Set query parameters
+		preparedStatement.setString(1, clientId);
+		preparedStatement.setInt(2, habit.getId());
+		preparedStatement.setInt(3, habit.getWeeklyHoursIntensity());
+		preparedStatement.setDate(4, Date.valueOf(habit.getRegisteredOn()));
+		// Execute query
+		return preparedStatement.executeUpdate() == 1;
 	}
 
 }
