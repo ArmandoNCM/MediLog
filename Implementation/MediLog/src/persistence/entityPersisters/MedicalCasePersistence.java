@@ -1,5 +1,6 @@
 package persistence.entityPersisters;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,15 +23,34 @@ public class MedicalCasePersistence {
 			"FROM case_history " + 
 			"JOIN medical_case_type " + 
 			"    ON case_history.case_type = medical_case_type.id_medical_case_type " + 
-			"WHERE case_history.client = ?";
+			"WHERE case_history.client = ? " +
+			"ORDER BY case_history.registered_on ASC";
 	
 	private static final String SELECT_MEDICAL_CASE_TYPES_QUERY = 
 			"SELECT " + 
 			"    id_medical_case_type, " + 
 			"    name " + 
-			"FROM medical_case_type";
+			"FROM medical_case_type " +
+			"ORDER BY name ASC";
 	
-	public static List<MedicalCase> getClientMedicalCases(String clientId) throws SQLException {
+	private static final String INSERT_CLIENT_MEDICAL_CASE_QUERY =
+			"INSERT INTO case_history  " + 
+			"    ( " + 
+			"        case_type, " + 
+			"        client, " + 
+			"        background_type, " + 
+			"        registered_on " + 
+			"    ) " + 
+			"VALUES (?, ?, ?, ?)";
+	
+	private static final String INSERT_MEDICAL_CASE_TYPE_QUERY =
+			"INSERT INTO medical_case_type " + 
+			"    ( " + 
+			"        name " + 
+			"    ) " + 
+			"VALUES (?)";
+	
+	public static List<MedicalCase> loadClientMedicalCases(String clientId) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_CLIENT_MEDICAL_CASES_QUERY);
 		// Set query parameters
@@ -58,7 +78,7 @@ public class MedicalCasePersistence {
 		return medicalCases;
 	}
 	
-	public static List<MedicalCase> getMedicalCaseTypes() throws SQLException {
+	public static List<MedicalCase> loadMedicalCaseTypes() throws SQLException {
 		// Create a simple statement and run query
 		Statement statement = Database.getInstance().getConnection().createStatement();
 		ResultSet resultSet = statement.executeQuery(SELECT_MEDICAL_CASE_TYPES_QUERY);
@@ -77,5 +97,26 @@ public class MedicalCasePersistence {
 		}
 		return medicalCaseTypes;
 	}
-
+	
+	public static boolean saveMedicalCase(String clientId, MedicalCase medicalCase) throws SQLException {
+		// Create prepared statement with parameterized query
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_CLIENT_MEDICAL_CASE_QUERY);
+		// Set query parameters
+		preparedStatement.setInt(1, medicalCase.getId());
+		preparedStatement.setString(2, clientId);
+		preparedStatement.setString(3, String.valueOf(medicalCase.getBackgroundType()));
+		preparedStatement.setDate(4, Date.valueOf(medicalCase.getRegisteredOn()));
+		// Execute query
+		return preparedStatement.executeUpdate() == 1;
+	}
+	
+	public static boolean saveMedicalCaseType(String medicalCaseName) throws SQLException {
+		// Create prepared statement with parameterized query
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_MEDICAL_CASE_TYPE_QUERY);
+		// Set query parameters
+		preparedStatement.setString(1, medicalCaseName);
+		// Execute query
+		return preparedStatement.executeUpdate() == 1;
+	}
+  
 }
