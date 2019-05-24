@@ -2,7 +2,7 @@ package entities;
 
 import java.time.LocalDate;
 
-public class OcupationalRecord {
+public class OccupationalRecord {
 	
 	private int id;
 	

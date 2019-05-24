@@ -24,7 +24,7 @@ public class Client extends Person {
 	
 	private List<MedicalCase> medicalCaseRecords;
 	
-	private List<OcupationalRecord> ocupationalRecords;
+	private List<OccupationalRecord> occupationalRecords;
 
 	public char getAcademicLevel() {
 		return academicLevel;
@@ -106,12 +106,12 @@ public class Client extends Person {
 		this.medicalCaseRecords = medicalCaseRecords;
 	}
 
-	public List<OcupationalRecord> getOcupationalRecords() {
-		return ocupationalRecords;
+	public List<OccupationalRecord> getOccupationalRecords() {
+		return occupationalRecords;
 	}
 
-	public void setOcupationalRecords(List<OcupationalRecord> ocupationalRecords) {
-		this.ocupationalRecords = ocupationalRecords;
+	public void setOccupationalRecords(List<OccupationalRecord> occupationalRecords) {
+		this.occupationalRecords = occupationalRecords;
 	}
 
 }
