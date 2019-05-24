@@ -10,7 +10,7 @@ import util.PropertiesUtil;
 
 public class Database {
 	
-	private static final String DATABASE_CONNECTION_URL = "jdbc:mysql://localhost/medi_log";
+	private static final String DATABASE_CONNECTION_URL_PROPERTY_KEY = "url";
 
 	private Connection connection;
 	
@@ -20,7 +20,7 @@ public class Database {
 		
 		try {
 		    Properties connectionProperties = PropertiesUtil.loadProperties(PropertiesUtil.DATABASE_PROPERTIES_FILEPATH);
-		    connection = DriverManager.getConnection(DATABASE_CONNECTION_URL, connectionProperties);
+		    connection = DriverManager.getConnection(connectionProperties.getProperty(DATABASE_CONNECTION_URL_PROPERTY_KEY), connectionProperties);
 		} catch (IOException exception) {
 			System.out.println("The database connection properties could not be loaded");
 			System.out.println("IOException: " + exception.getMessage());
