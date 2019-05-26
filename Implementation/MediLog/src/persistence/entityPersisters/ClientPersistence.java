@@ -46,9 +46,9 @@ public class ClientPersistence {
 		if (resultSet.first()) {
 			// Retrieve column data
 			int cityId = resultSet.getInt(1);
-			char academicLevel = resultSet.getString(2).charAt(0);
+			char academicLevel = resultSet.getString(2) != null ? resultSet.getString(2).charAt(0) : 0;
 			byte socialLevel = resultSet.getByte(3);
-			char civilStatus = resultSet.getString(4).charAt(0);
+			char civilStatus = resultSet.getString(4) != null ? resultSet.getString(4).charAt(0) : 0;
 			String address = resultSet.getString(5);
 			String phone = resultSet.getString(6);
 			
@@ -84,9 +84,9 @@ public class ClientPersistence {
 		// Set query parameters
 		preparedStatement.setString(1, client.getId());
 		preparedStatement.setInt(2, client.getCityId());
-		preparedStatement.setString(3, String.valueOf(client.getAcademicLevel()));
+		preparedStatement.setString(3, client.getAcademicLevel() != 0 ? String.valueOf(client.getAcademicLevel()) : null);
 		preparedStatement.setInt(4, client.getSocialLevel());
-		preparedStatement.setString(5, String.valueOf(client.getCivilStatus()));
+		preparedStatement.setString(5, client.getCivilStatus() != 0 ? String.valueOf(client.getCivilStatus()) : null);
 		preparedStatement.setString(6, client.getAddress());
 		preparedStatement.setString(7, client.getPhone());
 		// Execute query
