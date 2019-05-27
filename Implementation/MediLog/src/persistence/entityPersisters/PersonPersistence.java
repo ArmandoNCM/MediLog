@@ -12,7 +12,7 @@ import persistence.Database;
 public class PersonPersistence {
 	
 	private static final String EXISTS_QUERY = 
-			"SELECT COUNT(id_person) AS exists " + 
+			"SELECT COUNT(id_person) AS person_exists " + 
 			"FROM person " + 
 			"WHERE id_person = ?";
 	
