@@ -3,6 +3,8 @@ package ui.registration;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -57,6 +59,24 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 		
 		JPanel idExpeditionPanel = new JPanel(new GridLayout(2,1));
 		idExpeditionPanel.add(new JLabel("Ciudad de Expedición", JLabel.CENTER));
+		identificationExpeditionCityTextField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// No operation
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (e.getOppositeComponent().equals(selectExpeditionCityButton)) {
+					// Backward switch of focus
+					identificationNumberTextField.grabFocus();
+				} else {
+					// Forward or arbitrary switch of focus
+					selectExpeditionCityButton.grabFocus();
+				}
+			}
+		});
 		idExpeditionPanel.add(identificationExpeditionCityTextField);
 		
 		JPanel idExpeditionButtonPanel = new JPanel(new GridLayout(2,1));
