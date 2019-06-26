@@ -37,7 +37,7 @@ public class MainFrame extends JFrame {
 			if (event.getActionCommand().equals(ACTION_REGISTER_CLIENT)) {
 				
 				JInternalFrame clientRegistrationFrame = new ClientRegistration();
-				
+				clientRegistrationFrame.setVisible(true);
 				desktopPane.add(clientRegistrationFrame);
 				
 			}
