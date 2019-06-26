@@ -16,7 +16,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import ui.registration.ClientRegistration;
+import ui.exam.InformedConsentRegistrationInternalFrame;
+import ui.registration.ClientRegistrationInternalFrame;
 
 public class MainFrame extends JFrame {
 
@@ -25,7 +26,9 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final String ACTION_REGISTER_CLIENT = "ACTION_REGISTER_CLIENT";  
+	private static final String ACTION_REGISTER_CLIENT = "ACTION_REGISTER_CLIENT";
+	
+	private static final String ACTION_REGISTER_INFORMED_CONSENT = "ACTION_REGISTER_INFORMED_CONSENT";
 	
 	private JDesktopPane desktopPane;
 	
@@ -34,12 +37,21 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
-			if (event.getActionCommand().equals(ACTION_REGISTER_CLIENT)) {
+			
+			JInternalFrame internalFrame;
+			switch (event.getActionCommand()) {
 				
-				JInternalFrame clientRegistrationFrame = new ClientRegistration();
-				clientRegistrationFrame.setVisible(true);
-				desktopPane.add(clientRegistrationFrame);
-				
+				case ACTION_REGISTER_CLIENT:
+					internalFrame = new ClientRegistrationInternalFrame();
+					internalFrame.setVisible(true);
+					desktopPane.add(internalFrame);
+					break;
+	
+				case ACTION_REGISTER_INFORMED_CONSENT:
+					internalFrame = new InformedConsentRegistrationInternalFrame();
+					internalFrame.setVisible(true);
+					desktopPane.add(internalFrame);
+					break;
 			}
 			
 		}
@@ -81,6 +93,8 @@ public class MainFrame extends JFrame {
 		
 		JMenuItem informedConsentMenuItem = new JMenuItem("Consentimiento informado");
 		examsMenu.add(informedConsentMenuItem);
+		informedConsentMenuItem.setActionCommand(ACTION_REGISTER_INFORMED_CONSENT);
+		informedConsentMenuItem.addActionListener(actionListener);
 		
 		JMenuItem physicalExamMenuItem = new JMenuItem("Exámen físico");
 		examsMenu.add(physicalExamMenuItem);

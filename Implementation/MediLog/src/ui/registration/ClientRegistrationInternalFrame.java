@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ClientRegistration extends AbstractPersonRegistration {
+public class ClientRegistrationInternalFrame extends AbstractPersonRegistration {
 
 	/**
 	 * 
@@ -26,7 +26,7 @@ public class ClientRegistration extends AbstractPersonRegistration {
 	private JComboBox<Integer> socialLevelComboBox;
 	
 	
-	public ClientRegistration() {
+	public ClientRegistrationInternalFrame() {
 		super();
 		
 		// Text Fields initialization
