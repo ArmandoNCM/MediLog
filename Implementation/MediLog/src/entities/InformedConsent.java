@@ -35,6 +35,7 @@ public class InformedConsent {
 	
 	public InformedConsent(Client client) {
 		this.client = client;
+		clientId = client.getId();
 	}
 
 	public int getId() {
@@ -51,10 +52,6 @@ public class InformedConsent {
 
 	public Client getClient() {
 		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
 	}
 
 	public String getEmployeeId() {
