@@ -1,2 +1,3 @@
 *.bak
 Implementation/MediLog/data/database_connection.properties
+Main.java
