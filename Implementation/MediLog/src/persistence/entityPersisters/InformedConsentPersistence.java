@@ -65,11 +65,12 @@ public class InformedConsentPersistence {
 			char checkType = resultSet.getString(4).charAt(0);
 			boolean workInHeights = resultSet.getBoolean(5);
 			LocalDate date = resultSet.getDate(6).toLocalDate();
-			// Instantiate MedicalCase object
+			// Instantiate InformedConsent object
 			InformedConsent informedConsent = new InformedConsent(client);
 			informedConsent.setId(id);
 			informedConsent.setEmployeeId(employeeId);
-			// TODO use EmployeePersistence to load Employee
+			informedConsent.setEmployee(EmployeePersistence.loadEmployee(employeeId));
+			
 			if (contractingCompanyId != null) {
 				informedConsent.setContractingCompanyId(contractingCompanyId);
 				informedConsent.setContractingCompany(CompanyPersistence.loadCompany(contractingCompanyId));
@@ -100,12 +101,12 @@ public class InformedConsentPersistence {
 			char checkType = resultSet.getString(4).charAt(0);
 			boolean workInHeights = resultSet.getBoolean(5);
 			LocalDate date = resultSet.getDate(6).toLocalDate();
-			// Instantiate MedicalCase object
+			// Instantiate InformedConsent object
 			Client client = ClientPersistence.loadClient(clientId);
 			InformedConsent informedConsent = new InformedConsent(client);
 			informedConsent.setId(informedConsentId);
 			informedConsent.setEmployeeId(employeeId);
-			// TODO use EmployeePersistence to load Employee
+			informedConsent.setEmployee(EmployeePersistence.loadEmployee(employeeId));
 			if (contractingCompanyId != null) {
 				informedConsent.setContractingCompanyId(contractingCompanyId);
 				informedConsent.setContractingCompany(CompanyPersistence.loadCompany(contractingCompanyId));

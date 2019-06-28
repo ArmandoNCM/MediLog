@@ -16,7 +16,7 @@ INSERT INTO person (`id_person`, `first_name`, `last_name`, `birth_date`, `id_ex
 INSERT INTO client (`id_client`, `city`, `academic_level`, `social_level`, `civil_status`, `address`, `phone`) VALUES ('1110567597', 1, 'P', 3, 'S', 'Calle 39 #4-89', '3106492237');
 
 -- Employees
-INSERT INTO employee (`id_employee`) VALUES ('1110562084');
+INSERT INTO employee (`id_employee`, `role`, `password_salt`, `password_hash`) VALUES ('1110562084', 1, 'abcd1234', 'ABC123');
 
 -- Companies
 INSERT INTO company (`id_company`, `name`) VALUES ('900934988', 'SunDevs');
