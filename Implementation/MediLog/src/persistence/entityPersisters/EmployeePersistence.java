@@ -8,7 +8,7 @@ import entities.Employee;
 import persistence.Database;
 import util.PasswordUtils;
 
-public class EmployeePersistence {
+public abstract class EmployeePersistence {
 
 	private static final String SELECT_QUERY =
 			"SELECT role " + 

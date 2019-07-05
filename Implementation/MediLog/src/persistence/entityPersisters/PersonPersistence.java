@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import entities.Person;
 import persistence.Database;
 
-public class PersonPersistence {
+public abstract class PersonPersistence {
 	
 	private static final String EXISTS_QUERY = 
 			"SELECT COUNT(id_person) AS person_exists " + 

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import entities.Company;
 import persistence.Database;
 
-public class CompanyPersistence {
+public abstract class CompanyPersistence {
 	
 	private static final String SELECT_QUERY =
 			"SELECT " + 

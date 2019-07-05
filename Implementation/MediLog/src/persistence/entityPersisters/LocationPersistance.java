@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import entities.Location;
 import persistence.Database;
 
-public class LocationPersistance {
+public abstract class LocationPersistance {
 	
 	private static final String SELECT_QUERY = 
 			"SELECT " + 

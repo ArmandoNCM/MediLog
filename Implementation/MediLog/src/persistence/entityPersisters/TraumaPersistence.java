@@ -11,7 +11,7 @@ import java.util.List;
 import entities.Trauma;
 import persistence.Database;
 
-public class TraumaPersistence {
+public abstract class TraumaPersistence {
 	
 	private static final String  SELECT_QUERY =
 			"SELECT  " +  

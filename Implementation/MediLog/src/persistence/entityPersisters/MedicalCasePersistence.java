@@ -12,7 +12,7 @@ import java.util.List;
 import entities.MedicalCase;
 import persistence.Database;
 
-public class MedicalCasePersistence {
+public abstract class MedicalCasePersistence {
 	
 	private static final String SELECT_CLIENT_MEDICAL_CASES_QUERY = 
 			"SELECT " + 

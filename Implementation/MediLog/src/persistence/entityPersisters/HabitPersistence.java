@@ -12,7 +12,7 @@ import java.util.List;
 import entities.Habit;
 import persistence.Database;
 
-public class HabitPersistence {
+public abstract class HabitPersistence {
 	
 	private static final String SELECT_CLIENT_HABITS_QUERY = 
 			"SELECT " + 

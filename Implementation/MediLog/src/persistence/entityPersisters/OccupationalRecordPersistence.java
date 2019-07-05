@@ -11,7 +11,7 @@ import java.util.List;
 import entities.OccupationalRecord;
 import persistence.Database;
 
-public class OccupationalRecordPersistence {
+public abstract class OccupationalRecordPersistence {
 	
 	private static final String SELECT_QUERY = 
 			"SELECT " + 

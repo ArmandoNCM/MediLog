@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import entities.Client;
 import persistence.Database;
 
-public class ClientPersistence {
+public abstract class ClientPersistence {
 	
 	private static final String SELECT_QUERY = 
 			"SELECT " + 

@@ -12,7 +12,7 @@ import entities.Client;
 import entities.InformedConsent;
 import persistence.Database;
 
-public class InformedConsentPersistence {
+public abstract class InformedConsentPersistence {
 	
 	private static final String SELECT_CLIENT_INFORMED_CONSENTS_QUERY = "SELECT " + 
 			"    id_informed_consent, " + 

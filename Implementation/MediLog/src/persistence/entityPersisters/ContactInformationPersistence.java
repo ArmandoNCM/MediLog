@@ -9,7 +9,7 @@ import java.util.List;
 import entities.ContactInformation;
 import persistence.Database;
 
-public class ContactInformationPersistence {
+public abstract class ContactInformationPersistence {
 	
 	private static final String SELECT_QUERY = 
 			"SELECT   " + 

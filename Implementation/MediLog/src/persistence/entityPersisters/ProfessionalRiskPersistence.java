@@ -9,7 +9,7 @@ import java.util.List;
 import entities.ProfessionalRisk;
 import persistence.Database;
 
-public class ProfessionalRiskPersistence {
+public abstract class ProfessionalRiskPersistence {
 	
 	private static final String SELECT_PROFESSIONAL_RISK_TYPES_QUERY =
 			"SELECT " + 
