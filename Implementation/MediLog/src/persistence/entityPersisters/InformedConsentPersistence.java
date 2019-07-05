@@ -70,7 +70,6 @@ public abstract class InformedConsentPersistence {
 			informedConsent.setId(id);
 			informedConsent.setEmployeeId(employeeId);
 			informedConsent.setEmployee(EmployeePersistence.loadEmployee(employeeId));
-			
 			if (contractingCompanyId != null) {
 				informedConsent.setContractingCompanyId(contractingCompanyId);
 				informedConsent.setContractingCompany(CompanyPersistence.loadCompany(contractingCompanyId));
@@ -78,6 +77,9 @@ public abstract class InformedConsentPersistence {
 			informedConsent.setCheckType(checkType);
 			informedConsent.setWorkInHeights(workInHeights);
 			informedConsent.setDate(date);
+			informedConsent.setLaboratoryExams(LaboratoryExamPersistence.loadInformedConsentLaboratoryExams(id));
+			informedConsent.setProfessionalRisks(ProfessionalRiskPersistence.loadProfessionalRiskTypes(id));
+			PhysicalCheckPersistence.loadPhysicalCheck(informedConsent);
 			// Add to object to list
 			informedConsents.add(informedConsent);
 		}
@@ -114,6 +116,9 @@ public abstract class InformedConsentPersistence {
 			informedConsent.setCheckType(checkType);
 			informedConsent.setWorkInHeights(workInHeights);
 			informedConsent.setDate(date);
+			informedConsent.setLaboratoryExams(LaboratoryExamPersistence.loadInformedConsentLaboratoryExams(informedConsentId));
+			informedConsent.setProfessionalRisks(ProfessionalRiskPersistence.loadProfessionalRiskTypes(informedConsentId));
+			PhysicalCheckPersistence.loadPhysicalCheck(informedConsent);
 		
 			return informedConsent;
 		} else {

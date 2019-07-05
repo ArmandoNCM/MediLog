@@ -32,10 +32,14 @@ public class PhysicalCheck {
 	
 	private String conclusions;
 	
+	private String recommendations;
+	
 	private List<MedicalAnomaly> medicalAnomalies;
 	
 	public PhysicalCheck(InformedConsent informedConsent) {
+		id = informedConsent.getId();
 		this.informedConsent = informedConsent;
+		informedConsent.setPhysicalCheck(this);
 	}
 
 	public InformedConsent getInformedConsent() {
@@ -44,10 +48,6 @@ public class PhysicalCheck {
 
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getEmployeeId() {
@@ -145,7 +145,15 @@ public class PhysicalCheck {
 	public void setConclusions(String conclusions) {
 		this.conclusions = conclusions;
 	}
+	
+	public String getRecommendations() {
+		return recommendations;
+	}
 
+	public void setRecommendations(String recommendations) {
+		this.recommendations = recommendations;
+	}
+	
 	public List<MedicalAnomaly> getMedicalAnomalies() {
 		return medicalAnomalies;
 	}

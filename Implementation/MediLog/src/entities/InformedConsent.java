@@ -129,9 +129,17 @@ public class InformedConsent {
 	public PhysicalCheck getPhysicalCheck() {
 		return physicalCheck;
 	}
+	
+	void setPhysicalCheck(PhysicalCheck physicalCheck) {
+		this.physicalCheck = physicalCheck;
+	}
 
 	public WorkAptitudeConcept getWorkAptitudeConcept() {
 		return workAptitudeConcept;
+	}
+	
+	void setWorkAptitudeConcept(WorkAptitudeConcept workAptitudeConcept) {
+		this.workAptitudeConcept = workAptitudeConcept;
 	}
 	
 }
