@@ -15,7 +15,8 @@ public class EmployeePersistence {
 			"FROM employee " + 
 			"WHERE id_employee = ?";
 	
-	private static final String INSERT_QUERY = "INSERT INTO employee " + 
+	private static final String INSERT_QUERY = 
+			"INSERT INTO employee " + 
 			"    ( " + 
 			"        id_employee, " + 
 			"        role, " + 
@@ -24,7 +25,8 @@ public class EmployeePersistence {
 			"    ) " + 
 			"VALUES (?,?,?,?)";
 	
-	private static final String SELECT_PASSWORD_HASH_QUERY = "SELECT " + 
+	private static final String SELECT_PASSWORD_HASH_QUERY = 
+			"SELECT " + 
 			"    password_salt, " + 
 			"    password_hash " + 
 			"FROM employee " + 
