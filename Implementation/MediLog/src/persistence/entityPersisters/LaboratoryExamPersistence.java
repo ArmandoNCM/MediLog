@@ -104,50 +104,41 @@ public abstract class LaboratoryExamPersistence {
 		return exams;
 	}
 	
-	public static boolean saveLaboratoryExamAttachments(int examId, LaboratoryExamAttachment ...laboratoryExamAttachments) throws SQLException {
+	public static void saveLaboratoryExamAttachments(int examId, LaboratoryExamAttachment laboratoryExamAttachment) throws SQLException {
 		// Create prepared statement with parameterized query
-		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_LABORATORY_EXAM_ATTACHMENT);
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_LABORATORY_EXAM_ATTACHMENT, Statement.RETURN_GENERATED_KEYS);
 		// Set query parameters
-		for (LaboratoryExamAttachment laboratoryExamAttachment : laboratoryExamAttachments) {
-			preparedStatement.setInt(1,examId);
-			preparedStatement.setString(2, laboratoryExamAttachment.getName());
-			preparedStatement.setString(3, laboratoryExamAttachment.getUri().toString());
-			preparedStatement.addBatch();
-		}
+		preparedStatement.setInt(1,examId);
+		preparedStatement.setString(2, laboratoryExamAttachment.getName());
+		preparedStatement.setString(3, laboratoryExamAttachment.getUri().toString());
 		// Execute query
-		int[] results = preparedStatement.executeBatch();
-		boolean success = results.length > 0;
-		for (int result : results) {
-			if (result == 0) {
-				success = false;
-				break;
-			}
-		}
-
-		return success;
+		if (preparedStatement.executeUpdate() == 1) {
+			// Get generated keys
+			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+			if (generatedKeys.first())
+				laboratoryExamAttachment.setId(generatedKeys.getInt(1));
+			else
+				throw new SQLException("Save procedure failed, no IDs were generated");
+		} else
+			throw new SQLException("Save procedure failed, no rows were updated");
 	}
 	
-	public static void saveLaboratoryExam(LaboratoryExam laboratoryExam, int informedConsentId) throws SQLException {
+	public static void saveLaboratoryExam(int informedConsentId, LaboratoryExam laboratoryExam) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_LABORATORY_EXAM, Statement.RETURN_GENERATED_KEYS);
 		// Set query parameters
 		preparedStatement.setInt(1, informedConsentId);
 		preparedStatement.setString(2, laboratoryExam.getName());
 		// Execute query
-		boolean success = preparedStatement.executeUpdate() == 1;
-		
-		if (success) {
-			
+		if (preparedStatement.executeUpdate() == 1) {
+			// Get generated keys
 			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-			if (generatedKeys.first()) {
+			if (generatedKeys.first())
 				laboratoryExam.setId(generatedKeys.getInt(1));
-				if (laboratoryExam.getAttachments() != null && laboratoryExam.getAttachments().size() > 0)
-					saveLaboratoryExamAttachments(laboratoryExam.getId(), laboratoryExam.getAttachments().toArray(new LaboratoryExamAttachment[0]));
-			} else
+			else
 				throw new SQLException("Save procedure failed, no IDs were generated");
 		} else
 			throw new SQLException("Save procedure failed, no rows were updated");
-		
 	}
 	
 }
