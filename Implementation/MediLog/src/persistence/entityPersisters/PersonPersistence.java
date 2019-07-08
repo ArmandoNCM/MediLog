@@ -74,12 +74,10 @@ public abstract class PersonPersistence {
 			int idExpeditionCityId = resultSet.getInt(4);
 			char identificationType = resultSet.getString(5).charAt(0);
 			char gender = resultSet.getString(6).charAt(0);
-
 			// Initializing fields of person instance 
 			person.setFirstName(firstName);
 			person.setLastName(lastName);
 			person.setBirthDate(birthDate);
-			person.setIdExpeditionCityId(idExpeditionCityId);
 			person.setIdExpeditionCity(LocationPersistance.loadLocation(idExpeditionCityId));
 			person.setIdentificationType(identificationType);
 			person.setGender(gender);

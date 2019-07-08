@@ -54,16 +54,14 @@ public class PhysicalCheck {
 		return employeeId;
 	}
 
-	public void setEmployeeId(String employeeId) {
-		this.employeeId = employeeId;
-	}
-
 	public Employee getEmployee() {
 		return employee;
 	}
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+		if (employee != null)
+			employeeId = employee.getId();
 	}
 
 	public float getWeightKilograms() {

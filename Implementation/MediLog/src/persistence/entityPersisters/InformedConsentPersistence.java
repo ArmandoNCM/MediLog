@@ -68,12 +68,9 @@ public abstract class InformedConsentPersistence {
 			// Instantiate InformedConsent object
 			InformedConsent informedConsent = new InformedConsent(client);
 			informedConsent.setId(id);
-			informedConsent.setEmployeeId(employeeId);
 			informedConsent.setEmployee(EmployeePersistence.loadEmployee(employeeId));
-			if (contractingCompanyId != null) {
-				informedConsent.setContractingCompanyId(contractingCompanyId);
+			if (contractingCompanyId != null)
 				informedConsent.setContractingCompany(CompanyPersistence.loadCompany(contractingCompanyId));
-			}
 			informedConsent.setCheckType(checkType);
 			informedConsent.setWorkInHeights(workInHeights);
 			informedConsent.setDate(date);
@@ -108,12 +105,9 @@ public abstract class InformedConsentPersistence {
 			Client client = ClientPersistence.loadClient(clientId);
 			InformedConsent informedConsent = new InformedConsent(client);
 			informedConsent.setId(informedConsentId);
-			informedConsent.setEmployeeId(employeeId);
 			informedConsent.setEmployee(EmployeePersistence.loadEmployee(employeeId));
-			if (contractingCompanyId != null) {
-				informedConsent.setContractingCompanyId(contractingCompanyId);
+			if (contractingCompanyId != null)
 				informedConsent.setContractingCompany(CompanyPersistence.loadCompany(contractingCompanyId));
-			}
 			informedConsent.setCheckType(checkType);
 			informedConsent.setWorkInHeights(workInHeights);
 			informedConsent.setDate(date);

@@ -60,7 +60,6 @@ public abstract class OccupationalRecordPersistence {
 			// Instantiate Habit object
 			OccupationalRecord occupationalRecord = new OccupationalRecord();
 			occupationalRecord.setId(occupationalRecordId);
-			occupationalRecord.setCompanyId(companyId);
 			occupationalRecord.setCompany(CompanyPersistence.loadCompany(companyId));
 			occupationalRecord.setStartDate(startDate);
 			occupationalRecord.setEndDate(endDate);

@@ -54,16 +54,14 @@ public class OccupationalRecord {
 		return companyId;
 	}
 
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
-	}
-
 	public Company getCompany() {
 		return company;
 	}
 
 	public void setCompany(Company company) {
 		this.company = company;
+		if (company != null)
+			companyId = company.getId();
 	}
 
 	public LocalDate getRegisteredOn() {

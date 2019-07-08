@@ -40,16 +40,8 @@ public class WorkAptitudeConcept {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getEmployeeId() {
 		return employeeId;
-	}
-
-	public void setEmployeeId(String employeeId) {
-		this.employeeId = employeeId;
 	}
 
 	public Employee getEmployee() {
@@ -58,6 +50,8 @@ public class WorkAptitudeConcept {
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+		if (employee != null)
+			employeeId = employee.getId();
 	}
 
 	public char getWorkAptitude() {

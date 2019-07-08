@@ -55,8 +55,8 @@ public abstract class ClientPersistence {
 			// Instantiate Client object
 			Client client = new Client();
 			client.setId(clientId);
-			client.setCityId(cityId);
-			client.setCity(LocationPersistance.loadLocation(cityId));
+			if (cityId > 0)
+				client.setCity(LocationPersistance.loadLocation(cityId));
 			client.setAcademicLevel(academicLevel);
 			client.setSocialLevel(socialLevel);
 			client.setCivilStatus(civilStatus);

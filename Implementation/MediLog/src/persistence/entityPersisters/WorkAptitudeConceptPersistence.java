@@ -49,7 +49,11 @@ public abstract class WorkAptitudeConceptPersistence {
 		preparedStatement.setString(7, String.valueOf(workAptitudeConcept.getPsychotechnicTest()));
 		preparedStatement.setString(8, workAptitudeConcept.getRecommendations());
 		// Execute insert
-		return preparedStatement.executeUpdate() == 1;
+		boolean success = preparedStatement.executeUpdate() == 1;
+		if (success && workAptitudeConcept.getPostExamActions() != null && workAptitudeConcept.getPostExamActions().size() > 0)
+			 ;// TODO Insert post exam actions
+		
+		return success;
 	}
 	
 	static WorkAptitudeConcept loadWorkAptitudeConcept(InformedConsent informedConsent) throws SQLException {
@@ -70,7 +74,6 @@ public abstract class WorkAptitudeConceptPersistence {
 			String recommendations = resultSet.getString(7);
 			// Instantiate WorkAptitudeConcept object 
 			WorkAptitudeConcept concept = new WorkAptitudeConcept(informedConsent);
-			concept.setEmployeeId(employee);
 			concept.setEmployee(EmployeePersistence.loadEmployee(employee));
 			concept.setWorkAptitude(aptitude);
 			concept.setWorkInHeightsAptitude(workInHeightsAptitude);

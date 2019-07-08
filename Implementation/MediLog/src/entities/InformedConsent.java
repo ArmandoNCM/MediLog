@@ -58,16 +58,14 @@ public class InformedConsent {
 		return employeeId;
 	}
 
-	public void setEmployeeId(String employeeId) {
-		this.employeeId = employeeId;
-	}
-
 	public Employee getEmployee() {
 		return employee;
 	}
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+		if (employee != null)
+			employeeId = employee.getId();
 	}
 
 	public char getCheckType() {
@@ -82,16 +80,14 @@ public class InformedConsent {
 		return contractingCompanyId;
 	}
 
-	public void setContractingCompanyId(String contractingCompanyId) {
-		this.contractingCompanyId = contractingCompanyId;
-	}
-
 	public Company getContractingCompany() {
 		return contractingCompany;
 	}
 
 	public void setContractingCompany(Company contractingCompany) {
 		this.contractingCompany = contractingCompany;
+		if (contractingCompany != null)
+			contractingCompanyId = contractingCompany.getId();
 	}
 
 	public boolean isWorkInHeights() {

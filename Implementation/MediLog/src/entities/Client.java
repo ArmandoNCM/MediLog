@@ -54,16 +54,14 @@ public class Client extends Person {
 		return cityId;
 	}
 
-	public void setCityId(int cityId) {
-		this.cityId = cityId;
-	}
-
 	public Location getCity() {
 		return city;
 	}
 
 	public void setCity(Location city) {
 		this.city = city;
+		if (city != null)
+			cityId = city.getCityId();
 	}
 
 	public String getAddress() {

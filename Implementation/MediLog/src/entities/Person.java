@@ -56,16 +56,14 @@ public abstract class Person {
 		return idExpeditionCityId;
 	}
 
-	public void setIdExpeditionCityId(int expeditionCityId) {
-		this.idExpeditionCityId = expeditionCityId;
-	}
-
 	public Location getIdExpeditionCity() {
 		return idExpeditionCity;
 	}
 
 	public void setIdExpeditionCity(Location expeditionCity) {
 		this.idExpeditionCity = expeditionCity;
+		if (expeditionCity != null)
+			idExpeditionCityId = expeditionCity.getCityId(); 
 	}
 
 	public char getIdentificationType() {

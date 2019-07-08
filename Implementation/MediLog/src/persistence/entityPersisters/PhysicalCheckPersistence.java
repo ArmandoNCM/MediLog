@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import entities.InformedConsent;
+import entities.MedicalAnomaly;
 import entities.PhysicalCheck;
 import persistence.Database;
 
@@ -70,7 +71,6 @@ public abstract class PhysicalCheckPersistence {
 			String recommendations = resultSet.getString(12);
 			// Instantiate PhysicalCheck object
 			PhysicalCheck physicalCheck = new PhysicalCheck(informedConsent);
-			physicalCheck.setEmployeeId(employeeId);
 			physicalCheck.setEmployee(EmployeePersistence.loadEmployee(employeeId));
 			physicalCheck.setWeightKilograms(weight);
 			physicalCheck.setHeightCentimeters(height);
@@ -108,7 +108,11 @@ public abstract class PhysicalCheckPersistence {
 		preparedStatement.setString(12, physicalCheck.getConclusions());
 		preparedStatement.setString(13, physicalCheck.getRecommendations());
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		boolean success = preparedStatement.executeUpdate() == 1;
+		if (success && physicalCheck.getMedicalAnomalies() != null && physicalCheck.getMedicalAnomalies().size() > 0)
+			MedicalAnomallyPersistence.savePhysicalCheckMedicalAnomalies(physicalCheck.getId(), physicalCheck.getMedicalAnomalies().toArray(new MedicalAnomaly[0]));
+		
+		return success;
 	}
 
 }
