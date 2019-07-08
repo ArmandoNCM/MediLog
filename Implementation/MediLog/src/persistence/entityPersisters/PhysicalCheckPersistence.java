@@ -28,7 +28,7 @@ public abstract class PhysicalCheckPersistence {
 			"WHERE id_physical_check = ?";
 
 	private static final String INSERT_QUERY =
-			"INSERT INTO physical_check " + 
+			"REPLACE INTO physical_check " + 
 			"    ( " +
 			"        id_physical_check, " + 
 			"        employee, " + 
@@ -83,6 +83,7 @@ public abstract class PhysicalCheckPersistence {
 			physicalCheck.setDiagnostics(diagnostics);
 			physicalCheck.setConclusions(conclusions);
 			physicalCheck.setRecommendations(recommendations);
+			physicalCheck.setMedicalAnomalies(MedicalAnomallyPersistence.loadPhysicalCheckMedicalAnomalies(physicalCheck.getId()));
 			
 			return physicalCheck;
 		}

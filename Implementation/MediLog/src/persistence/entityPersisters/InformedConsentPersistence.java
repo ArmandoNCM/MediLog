@@ -80,6 +80,7 @@ public abstract class InformedConsentPersistence {
 			informedConsent.setLaboratoryExams(LaboratoryExamPersistence.loadInformedConsentLaboratoryExams(id));
 			informedConsent.setProfessionalRisks(ProfessionalRiskPersistence.loadProfessionalRiskTypes(id));
 			PhysicalCheckPersistence.loadPhysicalCheck(informedConsent);
+			WorkAptitudeConceptPersistence.loadWorkAptitudeConcept(informedConsent);
 			// Add to object to list
 			informedConsents.add(informedConsent);
 		}
@@ -119,7 +120,7 @@ public abstract class InformedConsentPersistence {
 			informedConsent.setLaboratoryExams(LaboratoryExamPersistence.loadInformedConsentLaboratoryExams(informedConsentId));
 			informedConsent.setProfessionalRisks(ProfessionalRiskPersistence.loadProfessionalRiskTypes(informedConsentId));
 			PhysicalCheckPersistence.loadPhysicalCheck(informedConsent);
-		
+			WorkAptitudeConceptPersistence.loadWorkAptitudeConcept(informedConsent);
 			return informedConsent;
 		} else {
 			return null;

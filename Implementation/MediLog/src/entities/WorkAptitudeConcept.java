@@ -27,7 +27,9 @@ public class WorkAptitudeConcept {
 	private List<PostExamAction> postExamActions;
 	
 	public WorkAptitudeConcept(InformedConsent informedConsent) {
+		id = informedConsent.getId();
 		this.informedConsent = informedConsent;
+		informedConsent.setWorkAptitudeConcept(this);
 	}
 
 	public InformedConsent getInformedConsent() {
