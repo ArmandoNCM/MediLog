@@ -28,13 +28,15 @@ public abstract class MedicalAnomallyPersistence {
 			"WHERE physical_check_medical_anomaly.physical_check = ?";
 	
 	private static final String INSERT_PHYSICAL_CHECK_MEDICAL_ANOMALY =
-			"REPLACE INTO physical_check_medical_anomaly " + 
+			"INSERT INTO physical_check_medical_anomaly " + 
 			"    ( " + 
 			"        physical_check, " + 
 			"        medical_anomaly, " + 
 			"        observations " + 
 			"    ) " + 
-			"VALUES (?,?,?)";
+			"VALUES (?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    observations = VALUES(observations)";
 	
 	
 	

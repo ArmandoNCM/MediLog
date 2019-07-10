@@ -37,7 +37,7 @@ public abstract class ProfessionalRiskPersistence {
 			"VALUES (?, ?)";
 	
 	private static final String INSERT_INFORMED_CONSENT_PROFESSIONAL_RISK_QUERY = 
-			"REPLACE INTO informed_consent_professional_risk " + 
+			"INSERT IGNORE INTO informed_consent_professional_risk " + 
 			"    ( " + 
 			"        informed_consent, " + 
 			"        professional_risk " + 

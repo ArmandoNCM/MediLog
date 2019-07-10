@@ -29,8 +29,8 @@ public abstract class PhysicalCheckPersistence {
 			"WHERE id_physical_check = ?";
 
 	private static final String INSERT_QUERY =
-			"REPLACE INTO physical_check " + 
-			"    ( " +
+			"INSERT INTO physical_check  " + 
+			"    ( " + 
 			"        id_physical_check, " + 
 			"        employee, " + 
 			"        weight_kilograms, " + 
@@ -43,9 +43,22 @@ public abstract class PhysicalCheckPersistence {
 			"        handedness, " + 
 			"        diagnostics, " + 
 			"        conclusions, " + 
-			"        recommendations " + 
-			"    ) " + 
-			"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			"        recommendations  " + 
+			"    )  " + 
+			"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    employee = VALUES(employee), " + 
+			"    weight_kilograms = VALUES(weight_kilograms), " + 
+			"    height_centimeters = VALUES(height_centimeters), " + 
+			"    pulse_beats_per_minute = VALUES(pulse_beats_per_minute), " + 
+			"    respiratory_frequency_per_minute = VALUES(respiratory_frequency_per_minute), " + 
+			"    body_temperature = VALUES(body_temperature), " + 
+			"    blood_pressure_standing = VALUES(blood_pressure_standing), " + 
+			"    blood_pressure_laying_down = VALUES(blood_pressure_laying_down), " + 
+			"    handedness = VALUES(handedness), " + 
+			"    diagnostics = VALUES(diagnostics), " + 
+			"    conclusions = VALUES(conclusions), " + 
+			"    recommendations = VALUES(recommendations)";
 	
 	static PhysicalCheck loadPhysicalCheck(InformedConsent informedConsent) throws SQLException{
 		// Create prepared statement

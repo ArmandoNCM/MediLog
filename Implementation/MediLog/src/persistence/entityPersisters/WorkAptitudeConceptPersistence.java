@@ -23,7 +23,7 @@ public abstract class WorkAptitudeConceptPersistence {
 			"WHERE id_work_aptitude_concept = ?";
 	
 	private static final String INSERT_QUERY =
-			"REPLACE INTO work_aptitude_concept " + 
+			"INSERT INTO work_aptitude_concept " + 
 			"    ( " + 
 			"        id_work_aptitude_concept, " + 
 			"        employee, " + 
@@ -34,7 +34,15 @@ public abstract class WorkAptitudeConceptPersistence {
 			"        psychotechnic_test, " + 
 			"        recommendations " + 
 			"    ) " + 
-			"VALUES (?,?,?,?,?,?,?,?)";
+			"VALUES (?,?,?,?,?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    employee = VALUES(employee), " + 
+			"    work_aptitude = VALUES(work_aptitude), " + 
+			"    work_in_heights_aptitude = VALUES(work_in_heights_aptitude), " + 
+			"    concept = VALUES(concept), " + 
+			"    concept_observations = VALUES(concept_observations), " + 
+			"    psychotechnic_test = VALUES(psychotechnic_test), " + 
+			"    recommendations = VALUES(recommendations)";
 	
 	public static boolean saveWorkAptitudeConcept(WorkAptitudeConcept workAptitudeConcept) throws SQLException {
 		// Create prepared statement
