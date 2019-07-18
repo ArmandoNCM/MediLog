@@ -31,7 +31,14 @@ public abstract class ClientPersistence {
 			"        address, " + 
 			"        phone " + 
 			"    ) " + 
-			"VALUES(?,?,?,?,?,?,?)";
+			"VALUES(?,?,?,?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    city = VALUES(city), " + 
+			"    academic_level = VALUES(academic_level), " + 
+			"    social_level = VALUES(social_level), " + 
+			"    civil_status = VALUES(civil_status), " + 
+			"    address = VALUES(address), " + 
+			"    phone = VALUES(phone)";
 	
 	
 	public static Client loadClient(String clientId) throws SQLException {
@@ -72,7 +79,7 @@ public abstract class ClientPersistence {
 		return null;
 	}
 	
-	public static boolean saveClient(Client client) throws SQLException {
+	public static void saveClient(Client client) throws SQLException {
 		
 		if (!PersonPersistence.personExists(client.getId())) {
 			// Store the person (superclass) data
@@ -90,7 +97,7 @@ public abstract class ClientPersistence {
 		preparedStatement.setString(6, client.getAddress());
 		preparedStatement.setString(7, client.getPhone());
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 
 }

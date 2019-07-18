@@ -31,7 +31,7 @@ public abstract class LaboratoryExamPersistence {
 			"WHERE laboratory_exam = ?";
 	
 	private static final String INSERT_LABORATORY_EXAM = 
-			"INSERT INTO laboratory_exam " + 
+			"INSERT IGNORE INTO laboratory_exam " + 
 			"    ( " + 
 			"        informed_consent, " + 
 			"        name " + 
@@ -45,7 +45,34 @@ public abstract class LaboratoryExamPersistence {
 			"        name, " + 
 			"        uri " + 
 			"    ) " + 
-			"VALUES (?,?,?)";
+			"VALUES (?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    uri = VALUES(uri)";
+	
+	public static List<LaboratoryExam> loadInformedConsentLaboratoryExams(int informedConsentId) throws SQLException {
+		// Create prepared statement with parameterized query
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_INFORMED_CONSENT_LABORATORY_EXAMS_QUERY);
+		// Set query parameters
+		preparedStatement.setInt(1, informedConsentId);
+		// Execute query
+		ResultSet resultSet = preparedStatement.executeQuery();
+		List<LaboratoryExam> exams = new ArrayList<>();
+		// Iterate over the result set
+		while (resultSet.next()) {
+			// Retrieve column data
+			int id = resultSet.getInt(1);
+			String name = resultSet.getString(2);
+			// Instantiate laboratory exam object
+			LaboratoryExam laboratoryExam = new LaboratoryExam();
+			laboratoryExam.setId(id);
+			laboratoryExam.setName(name);
+			laboratoryExam.setAttachments(loadLaboratoryExamAttachments(id));
+			// Add to object to list
+			exams.add(laboratoryExam);
+		}
+		
+		return exams;
+	}
 	
 	private static List<LaboratoryExamAttachment> loadLaboratoryExamAttachments(int laboratoryExamId) throws SQLException{
 		// Create prepared statement with parameterized query
@@ -79,29 +106,19 @@ public abstract class LaboratoryExamPersistence {
 		return attachments;
 	}
 	
-	public static List<LaboratoryExam> loadInformedConsentLaboratoryExams(int informedConsentId) throws SQLException {
+	public static void saveLaboratoryExam(int informedConsentId, LaboratoryExam laboratoryExam) throws SQLException {
 		// Create prepared statement with parameterized query
-		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_INFORMED_CONSENT_LABORATORY_EXAMS_QUERY);
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_LABORATORY_EXAM, Statement.RETURN_GENERATED_KEYS);
 		// Set query parameters
 		preparedStatement.setInt(1, informedConsentId);
+		preparedStatement.setString(2, laboratoryExam.getName());
 		// Execute query
-		ResultSet resultSet = preparedStatement.executeQuery();
-		List<LaboratoryExam> exams = new ArrayList<>();
-		// Iterate over the result set
-		while (resultSet.next()) {
-			// Retrieve column data
-			int id = resultSet.getInt(1);
-			String name = resultSet.getString(2);
-			// Instantiate laboratory exam object
-			LaboratoryExam laboratoryExam = new LaboratoryExam();
-			laboratoryExam.setId(id);
-			laboratoryExam.setName(name);
-			laboratoryExam.setAttachments(loadLaboratoryExamAttachments(id));
-			// Add to object to list
-			exams.add(laboratoryExam);
+		if (preparedStatement.executeUpdate() == 1) {
+			// Get generated keys
+			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+			if (generatedKeys.first())
+				laboratoryExam.setId(generatedKeys.getInt(1));
 		}
-		
-		return exams;
 	}
 	
 	public static void saveLaboratoryExamAttachments(int examId, LaboratoryExamAttachment laboratoryExamAttachment) throws SQLException {
@@ -117,28 +134,6 @@ public abstract class LaboratoryExamPersistence {
 			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 			if (generatedKeys.first())
 				laboratoryExamAttachment.setId(generatedKeys.getInt(1));
-			else
-				throw new SQLException("Save procedure failed, no IDs were generated");
-		} else
-			throw new SQLException("Save procedure failed, no rows were updated");
+		}
 	}
-	
-	public static void saveLaboratoryExam(int informedConsentId, LaboratoryExam laboratoryExam) throws SQLException {
-		// Create prepared statement with parameterized query
-		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_LABORATORY_EXAM, Statement.RETURN_GENERATED_KEYS);
-		// Set query parameters
-		preparedStatement.setInt(1, informedConsentId);
-		preparedStatement.setString(2, laboratoryExam.getName());
-		// Execute query
-		if (preparedStatement.executeUpdate() == 1) {
-			// Get generated keys
-			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-			if (generatedKeys.first())
-				laboratoryExam.setId(generatedKeys.getInt(1));
-			else
-				throw new SQLException("Save procedure failed, no IDs were generated");
-		} else
-			throw new SQLException("Save procedure failed, no rows were updated");
-	}
-	
 }

@@ -21,7 +21,9 @@ public abstract class CompanyPersistence {
 			"        id_company, " + 
 			"        name " + 
 			"    ) " + 
-			"VALUES (?, ?)";
+			"VALUES (?, ?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    name = VALUES(name)";
 	
 	
 	public static Company loadCompany(String companyId) throws SQLException {
@@ -46,14 +48,14 @@ public abstract class CompanyPersistence {
 		return null;
 	}
 	
-	public static boolean saveCompany(Company company) throws SQLException {
+	public static void saveCompany(Company company) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set query parameters
 		preparedStatement.setString(1, company.getId());
 		preparedStatement.setString(2, company.getName());
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 
 }

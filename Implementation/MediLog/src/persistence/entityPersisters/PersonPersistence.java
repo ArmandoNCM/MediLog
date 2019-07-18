@@ -17,17 +17,24 @@ public abstract class PersonPersistence {
 			"WHERE id_person = ?";
 	
 	private static final String INSERT_QUERY = 
-			"INSERT INTO person "
-			+ "( "
-				+ "id_person, "
-				+ "first_name, "
-				+ "last_name, "
-				+ "birth_date, "
-				+ "id_expedition_city, "
-				+ "identification_type, "
-				+ "gender "
-			+ ") "
-			+ "VALUES(?,?,?,?,?,?,?)";
+			"INSERT INTO person " + 
+			"( " + 
+			"    id_person, " + 
+			"    first_name, " + 
+			"    last_name, " + 
+			"    birth_date, " + 
+			"    id_expedition_city, " + 
+			"    identification_type, " + 
+			"    gender  " + 
+			") " + 
+			"VALUES(?,?,?,?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    first_name = VALUES(first_name), " + 
+			"    last_name = VALUES(last_name), " + 
+			"    birth_date = VALUES(birth_date), " + 
+			"    id_expedition_city = VALUES(id_expedition_city), " + 
+			"    identification_type = VALUES(identification_type), " + 
+			"    gender = VALUES(gender)";
 	
 	private static final String SELECT_QUERY = 
 			"SELECT " + 
@@ -41,7 +48,7 @@ public abstract class PersonPersistence {
 			"WHERE id_person = ? ";
 
 	
-	static boolean savePerson(Person person) throws SQLException {
+	static void savePerson(Person person) throws SQLException {
 		
 		// Create prepared statement with parameterized insert query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
@@ -54,7 +61,7 @@ public abstract class PersonPersistence {
 		preparedStatement.setString(6, String.valueOf(person.getIdentificationType()));
 		preparedStatement.setString(7, String.valueOf(person.getGender()));
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 	
 	static boolean loadPerson(Person person) throws SQLException {

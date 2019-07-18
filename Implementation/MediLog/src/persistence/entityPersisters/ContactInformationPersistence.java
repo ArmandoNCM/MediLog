@@ -23,14 +23,16 @@ public abstract class ContactInformationPersistence {
 			"   company = ?";
 	
 	private static final String INSERT_QUERY = 
-			"INSERT INTO contact_information " +
-			"   ( " +
-			"       type, " + 
-			"       name, " +
-			"       contact, " +
-			"       company "  + 
-			"   ) " + 
-			"VALUES(?,?,?,?)";
+			"INSERT INTO contact_information " + 
+			"    ( " + 
+			"        type, " + 
+			"        name, " + 
+			"        contact, " + 
+			"        company " + 
+			"    ) " + 
+			"VALUES(?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    contact = VALUES(contact)";
 	
 	public static List<ContactInformation> loadContactInformation (String companyId) throws SQLException {
 	
@@ -63,7 +65,7 @@ public abstract class ContactInformationPersistence {
 		return contactInformationList;
 	}
 	
-	public static boolean saveContacInformation(String companyId, ContactInformation contactInformation) throws SQLException {
+	public static void saveContacInformation(String companyId, ContactInformation contactInformation) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set query parameters
@@ -72,7 +74,7 @@ public abstract class ContactInformationPersistence {
 		preparedStatement.setString(3, contactInformation.getContact());
 		preparedStatement.setString(4, companyId);
 		// Execute query		
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 
 }

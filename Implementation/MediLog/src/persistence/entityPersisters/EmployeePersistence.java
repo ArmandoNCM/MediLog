@@ -23,7 +23,9 @@ public abstract class EmployeePersistence {
 			"        password_salt, " + 
 			"        password_hash " + 
 			"    ) " + 
-			"VALUES (?,?,?,?)";
+			"VALUES (?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    role = VALUES(role)";
 	
 	private static final String SELECT_PASSWORD_HASH_QUERY = 
 			"SELECT " + 
@@ -56,7 +58,10 @@ public abstract class EmployeePersistence {
 		return null;
 	}
 	
-	public static boolean saveEmployee(Employee employee, String password) throws SQLException {
+	public static void saveEmployee(Employee employee, String password) throws SQLException {
+		// Prevent null pointer exception with password
+		if (password == null)
+			password = "null";
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set query parameters
@@ -67,7 +72,7 @@ public abstract class EmployeePersistence {
 		preparedStatement.setBytes(3, salt);
 		preparedStatement.setBytes(4, passwordHash);
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 	
 	public static boolean confirmIdentity(String employeeId, String password) throws SQLException {

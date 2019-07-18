@@ -44,7 +44,7 @@ public abstract class WorkAptitudeConceptPersistence {
 			"    psychotechnic_test = VALUES(psychotechnic_test), " + 
 			"    recommendations = VALUES(recommendations)";
 	
-	public static boolean saveWorkAptitudeConcept(WorkAptitudeConcept workAptitudeConcept) throws SQLException {
+	public static void saveWorkAptitudeConcept(WorkAptitudeConcept workAptitudeConcept) throws SQLException {
 		// Create prepared statement
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set parameters
@@ -57,11 +57,9 @@ public abstract class WorkAptitudeConceptPersistence {
 		preparedStatement.setString(7, String.valueOf(workAptitudeConcept.getPsychotechnicTest()));
 		preparedStatement.setString(8, workAptitudeConcept.getRecommendations());
 		// Execute insert
-		boolean success = preparedStatement.executeUpdate() == 1;
-		if (success && workAptitudeConcept.getPostExamActions() != null && workAptitudeConcept.getPostExamActions().size() > 0)
+		preparedStatement.executeUpdate();
+		if (workAptitudeConcept.getPostExamActions() != null && workAptitudeConcept.getPostExamActions().size() > 0)
 			 ;// TODO Insert post exam actions
-		
-		return success;
 	}
 	
 	static WorkAptitudeConcept loadWorkAptitudeConcept(InformedConsent informedConsent) throws SQLException {

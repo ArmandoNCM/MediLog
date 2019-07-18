@@ -38,8 +38,6 @@ public abstract class MedicalAnomallyPersistence {
 			"ON DUPLICATE KEY UPDATE " + 
 			"    observations = VALUES(observations)";
 	
-	
-	
 	public static List<MedicalAnomaly> loadMedicalAnomalies() throws SQLException {
 		// Create prepared statement
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_MEDICAL_ANOMALIES_QUERY);
@@ -87,7 +85,7 @@ public abstract class MedicalAnomallyPersistence {
 		return anomalies;
 	}
 	
-	public static boolean savePhysicalCheckMedicalAnomalies(int physicalCheckId, MedicalAnomaly ...anomalies) throws SQLException {
+	public static void savePhysicalCheckMedicalAnomalies(int physicalCheckId, MedicalAnomaly ...anomalies) throws SQLException {
 		// Create prepared statement
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_PHYSICAL_CHECK_MEDICAL_ANOMALY);
 		// Iterate over the anomalies
@@ -100,15 +98,6 @@ public abstract class MedicalAnomallyPersistence {
 			preparedStatement.addBatch();
 		}
 		// Execute query
-		int[] results = preparedStatement.executeBatch();
-		boolean success = results.length > 0;
-		for (int result : results) {
-			if (result == 0) {
-				success = false;
-				break;
-			}
-		}
-
-		return success;
+		preparedStatement.executeBatch();
 	}
 }

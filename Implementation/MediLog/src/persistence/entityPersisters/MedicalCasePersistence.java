@@ -34,17 +34,19 @@ public abstract class MedicalCasePersistence {
 			"ORDER BY name ASC";
 	
 	private static final String INSERT_CLIENT_MEDICAL_CASE_QUERY =
-			"INSERT INTO case_history  " + 
+			"INSERT INTO case_history " + 
 			"    ( " + 
 			"        case_type, " + 
 			"        client, " + 
 			"        background_type, " + 
 			"        registered_on " + 
 			"    ) " + 
-			"VALUES (?, ?, ?, ?)";
+			"VALUES (?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    background_type = VALUES(background_type)";
 	
 	private static final String INSERT_MEDICAL_CASE_TYPE_QUERY =
-			"INSERT INTO medical_case_type " + 
+			"INSERT IGNORE INTO medical_case_type " + 
 			"    ( " + 
 			"        name " + 
 			"    ) " + 
@@ -98,7 +100,7 @@ public abstract class MedicalCasePersistence {
 		return medicalCaseTypes;
 	}
 	
-	public static boolean saveMedicalCase(String clientId, MedicalCase medicalCase) throws SQLException {
+	public static void saveMedicalCase(String clientId, MedicalCase medicalCase) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_CLIENT_MEDICAL_CASE_QUERY);
 		// Set query parameters
@@ -107,16 +109,16 @@ public abstract class MedicalCasePersistence {
 		preparedStatement.setString(3, String.valueOf(medicalCase.getBackgroundType()));
 		preparedStatement.setDate(4, Date.valueOf(medicalCase.getRegisteredOn()));
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 	
-	public static boolean saveMedicalCaseType(String medicalCaseName) throws SQLException {
+	public static void saveMedicalCaseType(String medicalCaseName) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_MEDICAL_CASE_TYPE_QUERY);
 		// Set query parameters
 		preparedStatement.setString(1, medicalCaseName);
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
   
 }

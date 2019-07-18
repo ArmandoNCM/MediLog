@@ -14,7 +14,8 @@ import persistence.Database;
 
 public abstract class InformedConsentPersistence {
 	
-	private static final String SELECT_CLIENT_INFORMED_CONSENTS_QUERY = "SELECT " + 
+	private static final String SELECT_CLIENT_INFORMED_CONSENTS_QUERY = 
+			"SELECT " + 
 			"    id_informed_consent, " + 
 			"    employee, " + 
 			"    contracting_company, " + 
@@ -24,7 +25,8 @@ public abstract class InformedConsentPersistence {
 			"FROM informed_consent " + 
 			"WHERE client = ?";
 	
-	private static final String SELECT_INFORMED_CONSENT_QUERY = "SELECT " + 
+	private static final String SELECT_INFORMED_CONSENT_QUERY = 
+			"SELECT " + 
 			"    client, " + 
 			"    employee, " + 
 			"    contracting_company, " + 
@@ -34,7 +36,8 @@ public abstract class InformedConsentPersistence {
 			"FROM informed_consent " + 
 			"WHERE id_informed_consent = ?";
 	
-	private static final String INSERT_INFORMED_CONSENT_QUERY = "INSERT INTO informed_consent " + 
+	private static final String INSERT_INFORMED_CONSENT_QUERY = 
+			"INSERT INTO informed_consent " + 
 			"    ( " + 
 			"        client, " + 
 			"        employee, " + 
@@ -43,7 +46,12 @@ public abstract class InformedConsentPersistence {
 			"        work_in_heights, " + 
 			"        date " + 
 			"    ) " + 
-			"VALUES (?,?,?,?,?,?)";
+			"VALUES (?,?,?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    employee = VALUES(employee), " + 
+			"    contracting_company = VALUES(contracting_company), " + 
+			"    check_type = VALUES(check_type), " + 
+			"    work_in_heights = VALUES(work_in_heights)";
 	
 	
 	public static List<InformedConsent> loadClientInformedConsents(Client client) throws SQLException {

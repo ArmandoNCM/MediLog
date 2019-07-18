@@ -29,7 +29,7 @@ public abstract class ProfessionalRiskPersistence {
 			"WHERE informed_consent_professional_risk.informed_consent = ?";
 	
 	private static final String INSERT_PROFESSIONAL_RISK_TYPE_QUERY =
-			"INSERT INTO professional_risk " + 
+			"INSERT IGNORE INTO professional_risk " + 
 			"    ( " + 
 			"        name, " + 
 			"        type " + 
@@ -84,23 +84,23 @@ public abstract class ProfessionalRiskPersistence {
 		return professionalRisks;
 	}
 	
-	public static boolean saveProfessionalRiskType(ProfessionalRisk professionalRisk) throws SQLException {
+	public static void saveProfessionalRiskType(ProfessionalRisk professionalRisk) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_PROFESSIONAL_RISK_TYPE_QUERY);
 		// Set query parameters
 		preparedStatement.setString(1, professionalRisk.getName());
 		preparedStatement.setString(2, professionalRisk.getType());
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 	
-	public static boolean saveProfessionalRisk(int informedConsentId, int professionalRiskId) throws SQLException {
+	public static void saveProfessionalRisk(int informedConsentId, int professionalRiskId) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_INFORMED_CONSENT_PROFESSIONAL_RISK_QUERY);
 		// Set query parameters
 		preparedStatement.setInt(1, informedConsentId);
 		preparedStatement.setInt(2, professionalRiskId);
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 }

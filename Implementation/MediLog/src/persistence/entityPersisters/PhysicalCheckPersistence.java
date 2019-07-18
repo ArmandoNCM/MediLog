@@ -103,7 +103,7 @@ public abstract class PhysicalCheckPersistence {
 		return null;
 	}
 	
-	public static boolean savePhysicalCheck(PhysicalCheck physicalCheck) throws SQLException {
+	public static void savePhysicalCheck(PhysicalCheck physicalCheck) throws SQLException {
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set query parameters
@@ -121,11 +121,9 @@ public abstract class PhysicalCheckPersistence {
 		preparedStatement.setString(12, physicalCheck.getConclusions());
 		preparedStatement.setString(13, physicalCheck.getRecommendations());
 		// Execute query
-		boolean success = preparedStatement.executeUpdate() == 1;
-		if (success && physicalCheck.getMedicalAnomalies() != null && physicalCheck.getMedicalAnomalies().size() > 0)
+		preparedStatement.executeUpdate();
+		if (physicalCheck.getMedicalAnomalies() != null && physicalCheck.getMedicalAnomalies().size() > 0)
 			MedicalAnomallyPersistence.savePhysicalCheckMedicalAnomalies(physicalCheck.getId(), physicalCheck.getMedicalAnomalies().toArray(new MedicalAnomaly[0]));
-		
-		return success;
 	}
 
 }

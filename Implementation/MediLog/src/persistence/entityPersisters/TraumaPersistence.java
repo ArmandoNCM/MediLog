@@ -70,7 +70,7 @@ public abstract class TraumaPersistence {
 		return traumas;
 	}
 			
-	public static boolean saveTrauma(String clientId, Trauma trauma) throws SQLException {
+	public static void saveTrauma(String clientId, Trauma trauma) throws SQLException {
 		
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
@@ -81,8 +81,7 @@ public abstract class TraumaPersistence {
 		preparedStatement.setDate(4, trauma.getOccurrenceDate() != null ? Date.valueOf(trauma.getOccurrenceDate()) : null);
 		preparedStatement.setDate(5, Date.valueOf(trauma.getRegisteredOn()));
 		
-		return preparedStatement.executeUpdate() == 1;		
-		
+		preparedStatement.executeUpdate();		
 	}
 
 }

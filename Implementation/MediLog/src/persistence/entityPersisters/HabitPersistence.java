@@ -34,7 +34,7 @@ public abstract class HabitPersistence {
 			"ORDER BY description ASC";
 	
 	private static final String INSERT_HABIT_QUERY =
-			"INSERT INTO habit " + 
+			"INSERT IGNORE INTO habit " + 
 			"    ( " + 
 			"        description " + 
 			"    ) " + 
@@ -48,7 +48,9 @@ public abstract class HabitPersistence {
 			"        weekly_hours_intensity, " + 
 			"        registered_on " + 
 			"    ) " + 
-			"VALUES (?, ?, ?, ?)";
+			"VALUES (?, ?, ?, ?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    weekly_hours_intensity = VALUES(weekly_hours_intensity)";
 	
 	public static List<Habit> loadClientHabits(String clientId) throws SQLException {
 		// Create prepared statement with parameterized query

@@ -25,7 +25,6 @@ public abstract class OccupationalRecordPersistence {
 			"WHERE client = ? " + 
 			"ORDER BY registered_on ASC";
 	
-	
 	private static final String INSERT_QUERY =
 			"INSERT INTO occupational_record " + 
 			"    ( " + 
@@ -36,8 +35,11 @@ public abstract class OccupationalRecordPersistence {
 			"        role, " + 
 			"        registered_on " + 
 			"    ) " + 
-			"VALUES (?, ?, ?, ?, ?, ?)";
-	
+			"VALUES (?,?,?,?,?,?) " + 
+			"ON DUPLICATE KEY UPDATE " + 
+			"    start_date = VALUES(start_date), " + 
+			"    end_date = VALUES(end_date), " + 
+			"    role = VALUES(role)";
 	
 	public static List<OccupationalRecord> loadOccupationalRecords(String clientId) throws SQLException {
 		// Create prepared statement with parameterized query
@@ -71,7 +73,7 @@ public abstract class OccupationalRecordPersistence {
 		return occupationalRecords;
 	}
 	
-	public static boolean saveOccupationalRecord(String clientId, OccupationalRecord occupationalRecord) throws SQLException { 
+	public static void saveOccupationalRecord(String clientId, OccupationalRecord occupationalRecord) throws SQLException { 
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set query parameters
@@ -82,7 +84,7 @@ public abstract class OccupationalRecordPersistence {
 		preparedStatement.setString(5, occupationalRecord.getRole());
 		preparedStatement.setDate(6, Date.valueOf(occupationalRecord.getRegisteredOn()));
 		// Execute query
-		return preparedStatement.executeUpdate() == 1;
+		preparedStatement.executeUpdate();
 	}
 
 }
