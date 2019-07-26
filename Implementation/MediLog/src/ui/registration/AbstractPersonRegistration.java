@@ -1,7 +1,10 @@
 package ui.registration;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -12,29 +15,39 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ClientRegistration extends JInternalFrame {
+public abstract class AbstractPersonRegistration extends JInternalFrame {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	JPanel contentPane, inputFormPanel;
 
-	public ClientRegistration() {
+	JComboBox<Character> identificationTypeComboBox, genderComboBox;
+
+	JTextField identificationNumberTextField, identificationExpeditionCityTextField, firstNameTextField, lastNameTextField, birthdateTextField;
+
+	public AbstractPersonRegistration() {
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setResizable(false);
+		setClosable(true);
+		setIconifiable(true);
 		
-		// ID
-		JComboBox<Character> identificationTypeComboBox = new JComboBox<Character>(new Character[]{'C', 'E'});
-		JTextField identificationNumberTextField = new JTextField();
-		JTextField identificationExpeditionCityTextField = new JTextField();
+		contentPane = new JPanel(new BorderLayout());
+		setContentPane(contentPane);
+		
+		// Initialization of components
+		identificationTypeComboBox = new JComboBox<Character>(new Character[]{'C', 'E'});
+		identificationNumberTextField = new JTextField();
+		identificationExpeditionCityTextField = new JTextField();
 		identificationExpeditionCityTextField.setEditable(false);
 		JButton selectExpeditionCityButton = new JButton("Seleccionar");
-		// Name
-		JTextField firstNameTextField = new JTextField();
-		JTextField lastNameTextField = new JTextField();
-		// Gender
-		JComboBox<Character> genderComboBox = new JComboBox<Character>(new Character[] {'M', 'F'});
-		JTextField birthdateTextField = new JTextField();
+		firstNameTextField = new JTextField();
+		lastNameTextField = new JTextField();
+		genderComboBox = new JComboBox<Character>(new Character[] {'M', 'F'});
+		birthdateTextField = new JTextField();
 		
 		JPanel idTypePanel = new JPanel(new GridLayout(2, 1));
 		idTypePanel.add(new JLabel("Tipo de Identificación", JLabel.CENTER));
@@ -46,6 +59,24 @@ public class ClientRegistration extends JInternalFrame {
 		
 		JPanel idExpeditionPanel = new JPanel(new GridLayout(2,1));
 		idExpeditionPanel.add(new JLabel("Ciudad de Expedición", JLabel.CENTER));
+		identificationExpeditionCityTextField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// No operation
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (e.getOppositeComponent().equals(selectExpeditionCityButton)) {
+					// Backward switch of focus
+					identificationNumberTextField.grabFocus();
+				} else {
+					// Forward or arbitrary switch of focus
+					selectExpeditionCityButton.grabFocus();
+				}
+			}
+		});
 		idExpeditionPanel.add(identificationExpeditionCityTextField);
 		
 		JPanel idExpeditionButtonPanel = new JPanel(new GridLayout(2,1));
@@ -76,22 +107,17 @@ public class ClientRegistration extends JInternalFrame {
 		additionalInfoPanel.add(genderPanel);
 		additionalInfoPanel.add(birthdatePanel);
 		
-		// Content pane
-		JPanel contentPane = new JPanel();
-		contentPane.setLayout(new GridLayout(3, 1));
-		contentPane.add(idInputPanel);
-		contentPane.add(namePanel);
-		contentPane.add(additionalInfoPanel);
-		contentPane.setBorder(BorderFactory.createTitledBorder("Datos Básicos"));
-		setContentPane(contentPane);
+		JPanel personInputFormPanel = new JPanel(new GridLayout(3, 1));
+		personInputFormPanel.add(idInputPanel);
+		personInputFormPanel.add(namePanel);
+		personInputFormPanel.add(additionalInfoPanel);
+		personInputFormPanel.setBorder(BorderFactory.createTitledBorder("Datos Básicos"));
 		
-		pack();
-		setResizable(false);
-		setVisible(true);
-		setClosable(true);
-		setIconifiable(true);
-		
+		inputFormPanel = new JPanel(new BorderLayout());
+		inputFormPanel.add(personInputFormPanel, BorderLayout.NORTH);
+
+		contentPane.add(inputFormPanel, BorderLayout.CENTER);		
 		
 	}
-
+	
 }
