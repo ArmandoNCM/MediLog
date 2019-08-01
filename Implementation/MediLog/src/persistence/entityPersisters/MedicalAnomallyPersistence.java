@@ -27,6 +27,10 @@ public abstract class MedicalAnomallyPersistence {
 			"    ON physical_check_medical_anomaly.medical_anomaly = medical_anomaly.id_medical_anomaly " + 
 			"WHERE physical_check_medical_anomaly.physical_check = ?";
 	
+	private static final String SELECT_MEDICAL_ANOMALY_TYPES_QUERY =
+			"SELECT type " + 
+			"FROM medical_anomaly";
+	
 	private static final String INSERT_PHYSICAL_CHECK_MEDICAL_ANOMALY =
 			"INSERT INTO physical_check_medical_anomaly " + 
 			"    ( " + 
@@ -99,5 +103,21 @@ public abstract class MedicalAnomallyPersistence {
 		}
 		// Execute query
 		preparedStatement.executeBatch();
+	}
+	
+	public static List<String> loadMedicalAnomalyTypes() throws SQLException {
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_MEDICAL_ANOMALY_TYPES_QUERY);
+		
+		// Execute query
+		ResultSet resultSet = preparedStatement.executeQuery();
+		
+		List<String> types = new ArrayList<>();
+		// Check results
+		while (resultSet.next()) {
+			// Retrieve data
+			String medicalAnomalyType = resultSet.getString(1);
+			types.add(medicalAnomalyType);
+		}
+		return types;
 	}
 }

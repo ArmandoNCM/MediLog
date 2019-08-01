@@ -54,7 +54,7 @@ INSERT INTO professional_risk (`name`, `type`) VALUES ('Carpal tunnel syndrome',
 INSERT INTO informed_consent_professional_risk (`informed_consent`, `professional_risk`) VALUES (1, 1);
 
 -- Medical Anomalies
-INSERT INTO medical_anomaly (`name`, `type`) VALUES ('Spine deviation', 'osseous');
+INSERT INTO medical_anomaly (`name`, `type`) VALUES ('Spine deviation', 'Osseous');
 
 -- Post Exam Actions
 INSERT INTO post_exam_action (`name`, `type`) VALUES ('Usage of ergonomic aids', 'Occupational');
