@@ -61,6 +61,7 @@ public class InformedConsentRegistrationInternalFrame extends JInternalFrame {
 		setResizable(false);
 		setClosable(true);
 		setIconifiable(true);
+		setTitle("Consentimiento informado");
 		
 		// Initialization of components
 		clientTextField = new JTextField();

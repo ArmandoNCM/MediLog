@@ -17,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import ui.exam.InformedConsentRegistrationInternalFrame;
+import ui.exam.PhysicalExamInternalFrame;
 import ui.registration.ClientRegistrationInternalFrame;
 
 public class MainFrame extends JFrame {
@@ -29,6 +30,9 @@ public class MainFrame extends JFrame {
 	private static final String ACTION_REGISTER_CLIENT = "ACTION_REGISTER_CLIENT";
 	
 	private static final String ACTION_REGISTER_INFORMED_CONSENT = "ACTION_REGISTER_INFORMED_CONSENT";
+	
+	
+	private static final String ACTION_REGISTER_PHYSICAL_CHECK = "ACTION_REGISTER_PHYSICAL_CHECK";
 	
 	private JDesktopPane desktopPane;
 	
@@ -49,6 +53,12 @@ public class MainFrame extends JFrame {
 	
 				case ACTION_REGISTER_INFORMED_CONSENT:
 					internalFrame = new InformedConsentRegistrationInternalFrame();
+					internalFrame.setVisible(true);
+					desktopPane.add(internalFrame);
+					break;
+					
+				case ACTION_REGISTER_PHYSICAL_CHECK:
+					internalFrame = new PhysicalExamInternalFrame();
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
 					break;
@@ -98,6 +108,8 @@ public class MainFrame extends JFrame {
 		
 		JMenuItem physicalExamMenuItem = new JMenuItem("Exámen físico");
 		examsMenu.add(physicalExamMenuItem);
+		physicalExamMenuItem.setActionCommand(ACTION_REGISTER_PHYSICAL_CHECK);
+		physicalExamMenuItem.addActionListener(actionListener);
 		
 		setJMenuBar(menuBar);
 		
