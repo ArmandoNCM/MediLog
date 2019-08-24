@@ -19,6 +19,9 @@ import javax.swing.JPanel;
 import ui.exam.InformedConsentRegistrationInternalFrame;
 import ui.exam.PhysicalExamInternalFrame;
 import ui.registration.ClientRegistrationInternalFrame;
+import ui.work_concept.PeriodicConceptInternalFrame;
+import ui.work_concept.RetireConceptInternalFrame;
+import ui.work_concept.WorkConceptInternalFrame;
 
 public class MainFrame extends JFrame {
 
@@ -33,6 +36,10 @@ public class MainFrame extends JFrame {
 	
 	
 	private static final String ACTION_REGISTER_PHYSICAL_CHECK = "ACTION_REGISTER_PHYSICAL_CHECK";
+	
+	private static final String ACTION_REGISTER_WORK_CONCEPT = "ACTION_REGISTER_WORK_CONCEPT";
+	
+	private static final String ACTION_REGISTER_RETIRE_CONCEPT = "ACTION_REGISTER_RETIRE_CONCEPT";
 	
 	private JDesktopPane desktopPane;
 	
@@ -59,6 +66,18 @@ public class MainFrame extends JFrame {
 					
 				case ACTION_REGISTER_PHYSICAL_CHECK:
 					internalFrame = new PhysicalExamInternalFrame();
+					internalFrame.setVisible(true);
+					desktopPane.add(internalFrame);
+					break;
+					
+				case ACTION_REGISTER_WORK_CONCEPT:
+					internalFrame = new WorkConceptInternalFrame();
+					internalFrame.setVisible(true);
+					desktopPane.add(internalFrame);
+					break;
+					
+				case ACTION_REGISTER_RETIRE_CONCEPT:
+					internalFrame = new RetireConceptInternalFrame();
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
 					break;
@@ -110,6 +129,16 @@ public class MainFrame extends JFrame {
 		examsMenu.add(physicalExamMenuItem);
 		physicalExamMenuItem.setActionCommand(ACTION_REGISTER_PHYSICAL_CHECK);
 		physicalExamMenuItem.addActionListener(actionListener);
+		
+		JMenuItem workConceptMenuItem = new JMenuItem("Examen de ingreso");
+		examsMenu.add(workConceptMenuItem);
+		workConceptMenuItem.setActionCommand(ACTION_REGISTER_WORK_CONCEPT);
+		workConceptMenuItem.addActionListener(actionListener);
+		
+		JMenuItem periodicConceptMenuItem = new JMenuItem("Examen de egreso");
+		examsMenu.add(periodicConceptMenuItem);
+		periodicConceptMenuItem.setActionCommand(ACTION_REGISTER_RETIRE_CONCEPT);
+		periodicConceptMenuItem.addActionListener(actionListener);
 		
 		setJMenuBar(menuBar);
 		
