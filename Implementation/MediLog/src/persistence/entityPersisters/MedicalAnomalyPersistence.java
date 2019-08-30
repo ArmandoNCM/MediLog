@@ -18,6 +18,13 @@ public abstract class MedicalAnomalyPersistence {
 			"    type " + 
 			"FROM medical_anomaly";
 	
+	private static final String SELECT_MEDICAL_ANOMALIES_BY_TYPE_QUERY = 
+			"SELECT " + 
+			"    id_medical_anomaly, " + 
+			"    name " + 
+			"FROM medical_anomaly " +
+			"WHERE type = ?";
+	
 	private static final String SELECT_PHYSICAL_CHECK_MEDICAL_ANOMALIES =
 			"SELECT " + 
 			"    medical_anomaly.id_medical_anomaly, " + 
@@ -57,6 +64,31 @@ public abstract class MedicalAnomalyPersistence {
 			int id = resultSet.getInt(1);
 			String name = resultSet.getString(2);
 			String type = resultSet.getString(3);
+			// Instantiate MedicalAnomaly object
+			MedicalAnomaly anomaly = new MedicalAnomaly();
+			anomaly.setId(id);
+			anomaly.setName(name);
+			anomaly.setType(type);
+			// Add anomaly to list
+			anomalies.add(anomaly);
+		}
+		return anomalies;
+	}
+	
+	public static List<MedicalAnomaly> loadMedicalAnomaliesByType(String type) throws SQLException {
+		// Create prepared statement
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_MEDICAL_ANOMALIES_BY_TYPE_QUERY);
+		// Set parameters
+		preparedStatement.setString(1, type);
+		// Execute query
+		ResultSet resultSet = preparedStatement.executeQuery();
+		
+		List<MedicalAnomaly> anomalies = new ArrayList<>();
+		// Check results
+		while (resultSet.next()) {
+			// Retrieve data
+			int id = resultSet.getInt(1);
+			String name = resultSet.getString(2);
 			// Instantiate MedicalAnomaly object
 			MedicalAnomaly anomaly = new MedicalAnomaly();
 			anomaly.setId(id);

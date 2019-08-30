@@ -2,7 +2,11 @@ package ui.exam;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -26,13 +30,56 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 	
 	private InformedConsent informedConsent;
 	
-	private MedicalAnomalyListModel medicalAnomalyListModel = new MedicalAnomalyListModel();
+	private List<MedicalAnomaly> selectedMedicalAnomalies = new ArrayList<MedicalAnomaly>();
+	
+	private MedicalAnomalyListModel medicalAnomaliesListModel = new MedicalAnomalyListModel();
 	
 	private static final long serialVersionUID = 1L;
 	private JTextField weightTextField, heightTextField, pulseTextField, tempeTextField, respiratoryFTextField, bloodPressureStanding, bloodPressureLayingDown;
 	
 	private JTextArea diagnosticsText, recomendationsText, conclusionsText;
 	private JComboBox<String> handednessComboBox;
+	
+	private Comparator<MedicalAnomaly> comparator = new Comparator<MedicalAnomaly>() {
+		
+		@Override
+		public int compare(MedicalAnomaly o1, MedicalAnomaly o2) {
+			return o1.toString().compareTo(o2.toString());
+		}
+	};
+	
+	private ActionListener addAnomalyActionListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+
+			String type = event.getActionCommand();
+			
+			AddMedicalAnomaliesInternalFrame addMedicalAnomaliesInternalFrame =  new AddMedicalAnomaliesInternalFrame(type, selectedMedicalAnomalies, new AddMedicalAnomaliesInternalFrame.MedicalAnomaliesSelectionListener() {
+				
+				@Override
+				public void onMedicalAnomaliesSelected(String medicalAnomalyType, List<MedicalAnomaly> selectedAnomalies) {
+					
+					List<MedicalAnomaly> anomaliesToRemove = new ArrayList<MedicalAnomaly>();
+					for (MedicalAnomaly anomaly : selectedMedicalAnomalies) {
+						if (anomaly.getType().equals(medicalAnomalyType))
+							anomaliesToRemove.add(anomaly);
+					}
+					selectedMedicalAnomalies.removeAll(anomaliesToRemove);
+					
+					selectedMedicalAnomalies.addAll(selectedAnomalies);
+					
+					selectedMedicalAnomalies.sort(comparator);
+					
+					medicalAnomaliesListModel.setAnomalies(selectedMedicalAnomalies);
+				}
+			});
+			addMedicalAnomaliesInternalFrame.setVisible(true);
+			getDesktopPane().add(addMedicalAnomaliesInternalFrame);
+			addMedicalAnomaliesInternalFrame.toFront();
+			
+		}
+	};
 	
 	
 	public PhysicalExamInternalFrame(InformedConsent informedConsent) {
@@ -112,26 +159,27 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 		
 		//Anomalies Panel
 		try {
-			List<String> anomalies = MedicalAnomalyPersistence.loadMedicalAnomalyTypes();
-			if (anomalies.size() > 0) {
+			List<String> anomalyTypes = MedicalAnomalyPersistence.loadMedicalAnomalyTypes();
+			if (anomalyTypes.size() > 0) {
 
 				JPanel anomalyPanel = new JPanel(new BorderLayout());
 				contentPane.add(anomalyPanel);
 				anomalyPanel.setBorder(BorderFactory.createTitledBorder("Anomalías médicas"));
 				// List
-				JList<MedicalAnomaly> anomaliasAgregadas = new JList<>(medicalAnomalyListModel);
+				JList<MedicalAnomaly> anomaliasAgregadas = new JList<>(medicalAnomaliesListModel);
 				JScrollPane scrollAnomalyList = new JScrollPane(anomaliasAgregadas);
 //				anomaliasAgregadas.set
 				anomalyPanel.add(scrollAnomalyList, BorderLayout.CENTER);
 				// Buttons
 				JPanel panelBotones = new JPanel();
 				int columns = 3;
-				int rows = anomalies.size() / columns;
-				if (anomalies.size() % columns > 0) rows++;
+				int rows = anomalyTypes.size() / columns;
+				if (anomalyTypes.size() % columns > 0) rows++;
 			
 				panelBotones.setLayout(new GridLayout(rows,columns));
-				for(int i=0; i<=anomalies.size()-1; i++) {
-					JButton boton = new JButton(anomalies.get(i));
+				for(String anomalyType : anomalyTypes) {
+					JButton boton = new JButton(anomalyType);
+					boton.addActionListener(addAnomalyActionListener);
 					panelBotones.add(boton);
 				}
 				anomalyPanel.add(panelBotones, BorderLayout.WEST);
@@ -191,8 +239,10 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 					break;
 			}
 			
-			if (physicalCheck.getMedicalAnomalies().size() > 0) {
-				medicalAnomalyListModel.setAnomalies(physicalCheck.getMedicalAnomalies());
+			selectedMedicalAnomalies = physicalCheck.getMedicalAnomalies();
+			
+			if (selectedMedicalAnomalies.size() > 0) {
+				medicalAnomaliesListModel.setAnomalies(selectedMedicalAnomalies);
 			}
 			
 		}

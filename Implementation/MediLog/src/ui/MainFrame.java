@@ -14,7 +14,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import entities.InformedConsent;
@@ -22,7 +21,6 @@ import ui.exam.PhysicalExamInternalFrame;
 import ui.informed_consent.InformedConsentRegistrationInternalFrame;
 import ui.informed_consent.InformedConsentSelectionInternalFrame;
 import ui.registration.ClientRegistrationInternalFrame;
-import ui.work_concept.PeriodicConceptInternalFrame;
 import ui.work_concept.RetireConceptInternalFrame;
 import ui.work_concept.WorkConceptInternalFrame;
 

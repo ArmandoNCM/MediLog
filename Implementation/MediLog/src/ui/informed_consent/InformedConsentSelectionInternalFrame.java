@@ -92,6 +92,7 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 		this.selectionListener = selectionListener;
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setTitle("Buscar consentimiento informado");
 		setResizable(false);
 		setClosable(true);
 		setIconifiable(true);
@@ -142,7 +143,7 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 	
 	public interface SelectionListener {
 		
-		public void onInformedConsentSelected(InformedConsent informedConsent);
+		void onInformedConsentSelected(InformedConsent informedConsent);
 		
 	}
 	
