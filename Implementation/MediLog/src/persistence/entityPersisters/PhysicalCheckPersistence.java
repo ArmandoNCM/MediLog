@@ -96,7 +96,7 @@ public abstract class PhysicalCheckPersistence {
 			physicalCheck.setDiagnostics(diagnostics);
 			physicalCheck.setConclusions(conclusions);
 			physicalCheck.setRecommendations(recommendations);
-			physicalCheck.setMedicalAnomalies(MedicalAnomallyPersistence.loadPhysicalCheckMedicalAnomalies(physicalCheck.getId()));
+			physicalCheck.setMedicalAnomalies(MedicalAnomalyPersistence.loadPhysicalCheckMedicalAnomalies(physicalCheck.getId()));
 			
 			return physicalCheck;
 		}
@@ -123,7 +123,7 @@ public abstract class PhysicalCheckPersistence {
 		// Execute query
 		preparedStatement.executeUpdate();
 		if (physicalCheck.getMedicalAnomalies() != null && physicalCheck.getMedicalAnomalies().size() > 0)
-			MedicalAnomallyPersistence.savePhysicalCheckMedicalAnomalies(physicalCheck.getId(), physicalCheck.getMedicalAnomalies().toArray(new MedicalAnomaly[0]));
+			MedicalAnomalyPersistence.savePhysicalCheckMedicalAnomalies(physicalCheck.getId(), physicalCheck.getMedicalAnomalies().toArray(new MedicalAnomaly[0]));
 	}
 
 }

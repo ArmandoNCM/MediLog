@@ -9,7 +9,7 @@ import java.util.List;
 import entities.MedicalAnomaly;
 import persistence.Database;
 
-public abstract class MedicalAnomallyPersistence {
+public abstract class MedicalAnomalyPersistence {
 
 	private static final String SELECT_MEDICAL_ANOMALIES_QUERY = 
 			"SELECT " + 

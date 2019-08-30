@@ -26,7 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import entities.MedicalAnomaly;
-import persistence.entityPersisters.MedicalAnomallyPersistence;
+import persistence.entityPersisters.MedicalAnomalyPersistence;
 
 public class PhysicalExamInternalFrame extends JInternalFrame {
 	
@@ -73,7 +73,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 	public PhysicalExamInternalFrame() {
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setTitle("Examen fisico");
+		setTitle("Examen físico");
 		setResizable(false);
 		setClosable(true);
 		setIconifiable(true);
@@ -175,7 +175,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 //		JList anomaliasAgregadas = new JList<String>();
 
 		try {
-			anomalies = MedicalAnomallyPersistence.loadMedicalAnomalyTypes();
+			anomalies = MedicalAnomalyPersistence.loadMedicalAnomalyTypes();
 			anomalyPanel.setLayout(new BorderLayout());
 //			add(panelCentral, BorderLayout.CENTER);
 			panelBotones.setLayout(new GridLayout(0,3));
