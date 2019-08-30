@@ -28,7 +28,7 @@ public abstract class MedicalAnomalyPersistence {
 			"WHERE physical_check_medical_anomaly.physical_check = ?";
 	
 	private static final String SELECT_MEDICAL_ANOMALY_TYPES_QUERY =
-			"SELECT type " + 
+			"SELECT DISTINCT(type) " + 
 			"FROM medical_anomaly";
 	
 	private static final String INSERT_PHYSICAL_CHECK_MEDICAL_ANOMALY =
