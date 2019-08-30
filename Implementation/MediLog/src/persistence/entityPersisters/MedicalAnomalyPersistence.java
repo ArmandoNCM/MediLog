@@ -51,6 +51,10 @@ public abstract class MedicalAnomalyPersistence {
 			"ON DUPLICATE KEY UPDATE " + 
 			"    observations = VALUES(observations)";
 	
+	private static final String DELETE_PHYSICAL_CHECK_MEDICAL_ANOMALIES =
+			"DELETE FROM physical_check_medical_anomaly " + 
+			"WHERE physical_check = ?";
+	
 	public static List<MedicalAnomaly> loadMedicalAnomalies() throws SQLException {
 		// Create prepared statement
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_MEDICAL_ANOMALIES_QUERY);
@@ -128,6 +132,8 @@ public abstract class MedicalAnomalyPersistence {
 	}
 	
 	public static void savePhysicalCheckMedicalAnomalies(int physicalCheckId, MedicalAnomaly ...anomalies) throws SQLException {
+		// Clear before storign new anomalies
+		clearPhysicalCheckMedicalAnomalies(physicalCheckId);
 		// Create prepared statement
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_PHYSICAL_CHECK_MEDICAL_ANOMALY);
 		// Iterate over the anomalies
@@ -141,6 +147,15 @@ public abstract class MedicalAnomalyPersistence {
 		}
 		// Execute query
 		preparedStatement.executeBatch();
+	}
+	
+	private static void clearPhysicalCheckMedicalAnomalies(int physicalCheckId) throws SQLException {
+		// Create prepared statement
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(DELETE_PHYSICAL_CHECK_MEDICAL_ANOMALIES);
+		// Set parameters
+		preparedStatement.setInt(1, physicalCheckId);
+		// Execute query
+		preparedStatement.executeUpdate();
 	}
 	
 	public static List<String> loadMedicalAnomalyTypes() throws SQLException {

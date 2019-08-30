@@ -122,7 +122,7 @@ public abstract class PhysicalCheckPersistence {
 		preparedStatement.setString(13, physicalCheck.getRecommendations());
 		// Execute query
 		preparedStatement.executeUpdate();
-		if (physicalCheck.getMedicalAnomalies() != null && physicalCheck.getMedicalAnomalies().size() > 0)
+		if (physicalCheck.getMedicalAnomalies() != null)
 			MedicalAnomalyPersistence.savePhysicalCheckMedicalAnomalies(physicalCheck.getId(), physicalCheck.getMedicalAnomalies().toArray(new MedicalAnomaly[0]));
 	}
 
