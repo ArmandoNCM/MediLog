@@ -1,4 +1,4 @@
-package ui.exam;
+package ui.informed_consent;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;

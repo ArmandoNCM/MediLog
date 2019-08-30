@@ -25,18 +25,22 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import entities.InformedConsent;
 import entities.MedicalAnomaly;
+import entities.PhysicalCheck;
 import persistence.entityPersisters.MedicalAnomalyPersistence;
 
 public class PhysicalExamInternalFrame extends JInternalFrame {
 	
+	private InformedConsent informedConsent;
+	
 	private JScrollPane scrollDiagnosticsText, scrollRecomendationsText, scrollConclusionsText, scrollAnomalyList ;
 	
 	private static final long serialVersionUID = 1L;
-	private JTextField weightTextField, heightTextField, pulseTextField, tempeTextField, respiratoryFTextField, bloodPressureU, bloodPressureD, imcTextField;
+	private JTextField weightTextField, heightTextField, pulseTextField, tempeTextField, respiratoryFTextField, bloodPressureStanding, bloodPressureLayingDown, imcTextField;
 	
 	private JTextArea diagnosticsText, recomendationsText, conclusionsText;
-	private JComboBox<Character> handednessComboBox;
+	private JComboBox<String> handednessComboBox;
 	
 	
 //	private FocusListener focusListener = new FocusListener() {
@@ -62,7 +66,9 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 //		}
 //	};
 
-	public PhysicalExamInternalFrame() {
+	public PhysicalExamInternalFrame(InformedConsent informedConsent) {
+		
+		this.informedConsent = informedConsent;
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Examen físico");
@@ -91,16 +97,16 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 		//respiratoryFTextField.setEditable(false);
 		//frTextField.addFocusListener(focusListener );
 		
-		bloodPressureU = new JTextField();
+		bloodPressureStanding = new JTextField();
 		//frTextField.addFocusListener(focusListener );
 		
-		bloodPressureD = new JTextField();
+		bloodPressureLayingDown = new JTextField();
 		//frTextField.addFocusListener(focusListener );
 		
 		imcTextField = new JTextField();
 		//frTextField.addFocusListener(focusListener );
 		
-		handednessComboBox = new JComboBox<> (new Character[] {'D', 'Z', 'A'});
+		handednessComboBox = new JComboBox<> (new String[] {"Diestro", "Zurdo", "Ambidiestro"});
 		
 		diagnosticsText = new JTextArea();
         diagnosticsText.setColumns(40);
@@ -142,10 +148,10 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 //		JPanel dataPhysicalPanel3 = new JPanel(new GridLayout(5, 2));
 		dataPhysicalPanel1.add(new JLabel("F.R / Min"));
 		dataPhysicalPanel1.add(respiratoryFTextField);
-		dataPhysicalPanel1.add(new JLabel("T.A. Sentado (MMHG)"));
-		dataPhysicalPanel1.add(bloodPressureU);
+		dataPhysicalPanel1.add(new JLabel("T.A. Parado (MMHG)"));
+		dataPhysicalPanel1.add(bloodPressureStanding);
 		dataPhysicalPanel1.add(new JLabel("T.A. Acostado (MMHG)"));
-		dataPhysicalPanel1.add(bloodPressureD);
+		dataPhysicalPanel1.add(bloodPressureLayingDown);
 		dataPhysicalPanel1.add(new JLabel("Mano dominante"));
 		dataPhysicalPanel1.add(handednessComboBox);
 		dataPhysicalPanel1.add(new JLabel("IMC"));
@@ -159,23 +165,20 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 		//partiesInputPanel.add(dataPhysicalPanel3);
 		
 		//Anomally Panel
-		List<String> anomalies = new ArrayList<>();
 		JList anomaliasAgregadas = new JList();
-		scrollAnomalyList = new JScrollPane(anomaliasAgregadas);
+		JScrollPane scrollAnomalyList = new JScrollPane(anomaliasAgregadas);
 		JPanel anomalyPanel = new JPanel();
 		JPanel panelBotones = new JPanel();
 //		anomalyPanel.setBorder(BorderFactory.createTitledBorder("Anomalias"));
 //		JList anomaliasAgregadas = new JList<String>();
 
 		try {
-			anomalies = MedicalAnomalyPersistence.loadMedicalAnomalyTypes();
+			List<String> anomalies = MedicalAnomalyPersistence.loadMedicalAnomalyTypes();
 			anomalyPanel.setLayout(new BorderLayout());
 //			add(panelCentral, BorderLayout.CENTER);
 			panelBotones.setLayout(new GridLayout(0,3));
-//			JButton boton = new JButton(anomalies.get(1).getName()) ;
-//			anomalyPanel.add(boton);
-			for(int x=0; x<=anomalies.size()-1; x++) {
-				JButton boton = new JButton(anomalies.get(x));
+			for(int i=0; i<=anomalies.size()-1; i++) {
+				JButton boton = new JButton(anomalies.get(i));
 				panelBotones.add(boton);
 			}
 			anomalyPanel.add(panelBotones, BorderLayout.WEST);
@@ -222,6 +225,40 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 		setContentPane(contentPane);
 		
 		pack();
+		
+		checkForExistingPhysicalExamData();
+	}
+	
+	private void checkForExistingPhysicalExamData() {
+
+		if (informedConsent.getPhysicalCheck() != null) {
+			
+			PhysicalCheck physicalCheck = informedConsent.getPhysicalCheck();
+			
+			weightTextField.setText(String.valueOf(physicalCheck.getWeightKilograms()));
+			heightTextField.setText(String.valueOf(physicalCheck.getHeightCentimeters()));
+			pulseTextField.setText(String.valueOf(physicalCheck.getPulseBeatsPerMinute()));
+			tempeTextField.setText(String.valueOf(physicalCheck.getBodyTemperature()));
+			respiratoryFTextField.setText(String.valueOf(physicalCheck.getRespiratoryFrequencyPerMinute()));
+			bloodPressureStanding.setText(String.valueOf(physicalCheck.getBloodPressureStanding()));
+			bloodPressureLayingDown.setText(String.valueOf(physicalCheck.getBloodPressureLayingDown()));
+			diagnosticsText.setText(String.valueOf(physicalCheck.getDiagnostics()));
+			conclusionsText.setText(String.valueOf(physicalCheck.getConclusions()));
+			recomendationsText.setText(String.valueOf(physicalCheck.getRecommendations()));
+			
+			switch (physicalCheck.getHandedness()) {
+				case 'R':
+					handednessComboBox.setSelectedIndex(0);
+					break;
+				case 'L':
+					handednessComboBox.setSelectedIndex(1);
+					break;
+				case 'A':
+					handednessComboBox.setSelectedIndex(2);
+					break;
+			}
+			
+		}
 	}
 
 }
