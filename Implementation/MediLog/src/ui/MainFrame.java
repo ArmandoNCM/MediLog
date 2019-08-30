@@ -127,7 +127,7 @@ public class MainFrame extends JFrame {
 		registryMenu.add(registerEmployeeMenuItem);
 		
 		// Exams
-		JMenu examsMenu = new JMenu("Exámenes");
+		JMenu examsMenu = new JMenu("Examenes");
 		menuBar.add(examsMenu);
 		
 		JMenuItem informedConsentMenuItem = new JMenuItem("Consentimiento informado");
@@ -135,7 +135,7 @@ public class MainFrame extends JFrame {
 		informedConsentMenuItem.setActionCommand(ACTION_REGISTER_INFORMED_CONSENT);
 		informedConsentMenuItem.addActionListener(actionListener);
 		
-		JMenuItem physicalExamMenuItem = new JMenuItem("Exámen físico");
+		JMenuItem physicalExamMenuItem = new JMenuItem("Examen físico");
 		examsMenu.add(physicalExamMenuItem);
 		physicalExamMenuItem.setActionCommand(ACTION_REGISTER_PHYSICAL_CHECK);
 		physicalExamMenuItem.addActionListener(actionListener);
