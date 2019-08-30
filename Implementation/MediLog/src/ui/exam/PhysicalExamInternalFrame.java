@@ -30,7 +30,7 @@ import persistence.entityPersisters.MedicalAnomalyPersistence;
 
 public class PhysicalExamInternalFrame extends JInternalFrame {
 	
-	private JScrollPane scrollDiagnosticsText, scrollRecomendationsText, scrollConclusionsText ;
+	private JScrollPane scrollDiagnosticsText, scrollRecomendationsText, scrollConclusionsText, scrollAnomalyList ;
 	
 	private static final long serialVersionUID = 1L;
 	private JTextField weightTextField, heightTextField, pulseTextField, tempeTextField, respiratoryFTextField, bloodPressureU, bloodPressureD, imcTextField;
@@ -38,14 +38,6 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 	private JTextArea diagnosticsText, recomendationsText, conclusionsText;
 	private JComboBox<Character> handednessComboBox;
 	
-	//private MedicalAnomallyPersistence medicalAnomallyPersistence;
-	//private MedicalAnomaly medicalAnomaly;
-	
-//	private JButton osteoButton;
-//	private JButton eyesButton;
-//	private JButton earsButton;
-//	private JButton noseButton;
-//	private JButton mouthButton;
 	
 //	private FocusListener focusListener = new FocusListener() {
 //		
@@ -169,6 +161,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 		//Anomally Panel
 		List<String> anomalies = new ArrayList<>();
 		JList anomaliasAgregadas = new JList();
+		scrollAnomalyList = new JScrollPane(anomaliasAgregadas);
 		JPanel anomalyPanel = new JPanel();
 		JPanel panelBotones = new JPanel();
 //		anomalyPanel.setBorder(BorderFactory.createTitledBorder("Anomalias"));
@@ -183,14 +176,9 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 //			anomalyPanel.add(boton);
 			for(int x=0; x<=anomalies.size()-1; x++) {
 				JButton boton = new JButton(anomalies.get(x));
-//				boton.setMinimumSize(new Dimension(20,20));
-//				boton.setMaximumSize(new Dimension(150, 60));
-//				boton.setPreferredSize(new Dimension(120, 30));
 				panelBotones.add(boton);
-//				anomalyPanel.add(boton);
 			}
 			anomalyPanel.add(panelBotones, BorderLayout.WEST);
-			//anomalyPanel.add(anomaliasAgregadas);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
