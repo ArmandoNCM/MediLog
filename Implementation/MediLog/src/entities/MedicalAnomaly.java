@@ -6,6 +6,8 @@ public class MedicalAnomaly {
 	
 	private String name;
 	
+	private String type;
+	
 	private String observations;
 
 	public int getId() {
@@ -23,6 +25,14 @@ public class MedicalAnomaly {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getObservations() {
 		return observations;
@@ -30,6 +40,11 @@ public class MedicalAnomaly {
 
 	public void setObservations(String observations) {
 		this.observations = observations;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s - %s", getType(), getName());
 	}
 
 }

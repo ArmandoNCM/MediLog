@@ -14,13 +14,15 @@ public abstract class MedicalAnomalyPersistence {
 	private static final String SELECT_MEDICAL_ANOMALIES_QUERY = 
 			"SELECT " + 
 			"    id_medical_anomaly, " + 
-			"    name " + 
+			"    name, " + 
+			"    type " + 
 			"FROM medical_anomaly";
 	
 	private static final String SELECT_PHYSICAL_CHECK_MEDICAL_ANOMALIES =
 			"SELECT " + 
 			"    medical_anomaly.id_medical_anomaly, " + 
 			"    medical_anomaly.name, " + 
+			"    medical_anomaly.type, " + 
 			"    physical_check_medical_anomaly.observations " + 
 			"FROM medical_anomaly " + 
 			"JOIN physical_check_medical_anomaly " + 
@@ -54,10 +56,12 @@ public abstract class MedicalAnomalyPersistence {
 			// Retrieve data
 			int id = resultSet.getInt(1);
 			String name = resultSet.getString(2);
+			String type = resultSet.getString(3);
 			// Instantiate MedicalAnomaly object
 			MedicalAnomaly anomaly = new MedicalAnomaly();
 			anomaly.setId(id);
 			anomaly.setName(name);
+			anomaly.setType(type);
 			// Add anomaly to list
 			anomalies.add(anomaly);
 		}
@@ -77,11 +81,13 @@ public abstract class MedicalAnomalyPersistence {
 			// Retrieve data
 			int id = resultSet.getInt(1);
 			String name = resultSet.getString(2);
-			String observations = resultSet.getString(3);
+			String type = resultSet.getString(3);
+			String observations = resultSet.getString(4);
 			// Instantiate MedicalAnomaly object
 			MedicalAnomaly anomaly = new MedicalAnomaly();
 			anomaly.setId(id);
 			anomaly.setName(name);
+			anomaly.setType(type);
 			anomaly.setObservations(observations);
 			// Add anomaly to list
 			anomalies.add(anomaly);

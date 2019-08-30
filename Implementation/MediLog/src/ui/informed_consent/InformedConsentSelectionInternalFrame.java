@@ -16,8 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.TableModel;
-
 import entities.Client;
 import entities.InformedConsent;
 import persistence.entityPersisters.ClientPersistence;
@@ -37,7 +35,7 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 	private static final String ACTION_CANCEL = "ACTION_CANCEL";
 
 	private JTable informedConsentsTable;
-	private InformedConsentTableModel informedConsentTableModel;
+	private InformedConsentTableModel informedConsentTableModel = new InformedConsentTableModel();
 	private JTextField patiendIdField;
 	
 	private SelectionListener selectionListener;
@@ -114,8 +112,7 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 		
 		contentPane.add(searchBarPanel, BorderLayout.NORTH);
 		
-		informedConsentTableModel = new InformedConsentTableModel();
-		informedConsentsTable = new JTable((TableModel) informedConsentTableModel);
+		informedConsentsTable = new JTable(informedConsentTableModel);
 		informedConsentsTable.setFillsViewportHeight(true);
 		informedConsentsTable.setRowSelectionAllowed(true);
 		
