@@ -24,7 +24,7 @@ public class RetireConceptInternalFrame extends AbstractWorkConcept{
 		retireConcept = new JComboBox<Character>(new Character [] {'A', 'N'});
 		
 		JPanel retireConceptPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-		retireConceptPanel.setBorder(BorderFactory.createTitledBorder("Examen de egreso"));	
+		retireConceptPanel.setBorder(BorderFactory.createTitledBorder("Examen de Egreso"));	
 		retireConceptPanel.add(new JLabel("Concepto examen de egreso"));
 		retireConceptPanel.add(retireConcept);
 		

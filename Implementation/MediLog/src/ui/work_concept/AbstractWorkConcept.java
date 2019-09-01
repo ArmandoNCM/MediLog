@@ -59,7 +59,7 @@ public abstract class AbstractWorkConcept extends JInternalFrame{
 		
 		//psychotechnicPanel
 		JPanel psychotechnicPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-		psychotechnicPanel.add(new JLabel("Concepto prueba psicotecnica", JLabel.CENTER));
+		psychotechnicPanel.add(new JLabel("Concepto Prueba Psicotécnica", JLabel.CENTER));
 		psychotechnicPanel.add(psychotechnicTest);
 		
 		//Conduct Panel (Post Exam Actions)
@@ -85,7 +85,7 @@ public abstract class AbstractWorkConcept extends JInternalFrame{
 		postExamPanel.add(scrollPostExamList);
 		
 		JPanel recommendationsPanel = new JPanel(new BorderLayout());
-		recommendationsPanel.setBorder(BorderFactory.createTitledBorder("Recomendaciones especificas"));
+		recommendationsPanel.setBorder(BorderFactory.createTitledBorder("Recomendaciónes específicas"));
 		recommendationsPanel.add(scrollRecommendationsText);
 		
 		

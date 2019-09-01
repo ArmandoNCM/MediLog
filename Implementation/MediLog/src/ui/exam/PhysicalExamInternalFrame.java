@@ -225,7 +225,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 		JPanel diagnosticsPanel = new JPanel(new GridLayout(1,1));
 		contentPane.add(diagnosticsPanel);
 		diagnosticsPanel.add(scrollDiagnosticsText);
-		diagnosticsPanel.setBorder(BorderFactory.createTitledBorder("Diagnostico"));
+		diagnosticsPanel.setBorder(BorderFactory.createTitledBorder("Diagnóstico"));
 
 		//Conclusions Panel
 		JPanel conclusionPanel = new JPanel(new GridLayout(1,1));
