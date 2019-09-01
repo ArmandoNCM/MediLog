@@ -1,43 +1,149 @@
 package ui.registration;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ClientRegistrationInternalFrame extends AbstractPersonRegistration {
+import character_values.AcademicLevel;
+import character_values.CharacterValueHoldingEnum;
+import character_values.CivilStatus;
+import character_values.SocialLevel;
+import entities.Client;
+import entities.Location;
+import persistence.entityPersisters.ClientPersistence;
 
+public class ClientRegistrationInternalFrame extends AbstractPersonRegistration {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4968994853618272668L;
+
+	private static final String ACTION_ACCEPT = "ACTION_ACCEPT";
+	
+	private static final String ACTION_CANCEL = "ACTION_CANCEL";
+	
+	private static final String ACTION_SELECT_LOCATION = "ACTION_SELECT_RESIDENCY_LOCATION";
+	
+	private Client client;
+	
+	private Location residencyCity;
 	
 	private JTextField cityTextField, addressTextField, phoneTextField;
 	
-	private JComboBox<Character> academicLevelComboBox, civilStatusComboBox;
+	private JComboBox<AcademicLevel> academicLevelComboBox;
 	
-	private JComboBox<Integer> socialLevelComboBox;
+	private JComboBox<CivilStatus> civilStatusComboBox;
 	
+	private JComboBox<SocialLevel> socialLevelComboBox;
+	
+	private JButton citySelectionButton;
+	
+	private LocationSelectionInternalFrame.LocationSelectionListener listener = new LocationSelectionInternalFrame.LocationSelectionListener() {
+		
+		@Override
+		public void onLocationSelected(Location location) {
+			residencyCity = location;
+			cityTextField.setText(residencyCity.getCity());
+		}
+	};
+	
+	private ActionListener actionListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+
+			switch (event.getActionCommand()) {
+			case ACTION_ACCEPT:
+				
+				try {
+					readInputValues();
+					ClientPersistence.saveClient(client);
+					dispose();
+					JOptionPane.showMessageDialog(getDesktopPane(), "Datos guardados con éxito", "Éxito al guardar", JOptionPane.INFORMATION_MESSAGE);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(getDesktopPane(), e.getMessage());
+				}
+				break;
+			case ACTION_CANCEL:
+				dispose();
+				break;
+			case ACTION_SELECT_LOCATION:
+				JInternalFrame internalFrame = new LocationSelectionInternalFrame(listener);
+				internalFrame.setVisible(true);
+				getDesktopPane().add(internalFrame);
+				internalFrame.toFront();
+			}
+		}
+	};
+	
+	private FocusListener focusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent event) {
+			
+			if (event.getComponent() == phoneTextField) {
+				phoneTextField.setText(phoneTextField.getText().replaceAll("[^\\d]", "" ));
+			}
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+		}
+	};
+	
+	private FocusListener switchOrderFocusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+		}
+		
+		@Override
+		public void focusGained(FocusEvent event) {
+			if (event.getOppositeComponent() == citySelectionButton) {
+				// Backward switch of focus
+				addressTextField.grabFocus();
+			} else {
+				// Forward or arbitrary switch of focus
+				citySelectionButton.grabFocus();
+			}
+		}
+	};
 	
 	public ClientRegistrationInternalFrame() {
 		super();
 		
+		person = client = new Client();
+		
 		// Text Fields initialization
 		cityTextField = new JTextField();
+		cityTextField.setEditable(false);
+		cityTextField.setBackground(Color.WHITE);
+		cityTextField.addFocusListener(switchOrderFocusListener);
 		addressTextField = new JTextField();
 		phoneTextField = new JTextField();
+		phoneTextField.addFocusListener(focusListener);
 		// Character Combo Boxes initialization 
-		academicLevelComboBox = new JComboBox<>(new Character[] {'B', 'S', 'T', 'P'});
-		civilStatusComboBox = new JComboBox<>(new Character[] {'S', 'U', 'C', 'V'});
+		academicLevelComboBox = new JComboBox<>(AcademicLevel.values());
+		civilStatusComboBox = new JComboBox<>(CivilStatus.values());
 		// Integer Combo Box initialization
-		socialLevelComboBox = new JComboBox<>(new Integer[] {1, 2, 3, 4, 5, 6});
+		socialLevelComboBox = new JComboBox<>(SocialLevel.values());
 		
 		// Residential information
 		JPanel addressInputPanel = new JPanel(new GridLayout(2,1));
@@ -48,7 +154,9 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 		cityInputPanel.add(new JLabel("Ciudad de Residencia"));
 		cityInputPanel.add(cityTextField);
 		
-		JButton citySelectionButton = new JButton("Seleccionar");
+		citySelectionButton = new JButton("Seleccionar");
+		citySelectionButton.setActionCommand(ACTION_SELECT_LOCATION);
+		citySelectionButton.addActionListener(actionListener);
 		JPanel citySelectionButtonPanel = new JPanel(new GridLayout(2,1));
 		citySelectionButtonPanel.add(Box.createVerticalStrut(10));
 		citySelectionButtonPanel.add(citySelectionButton);
@@ -89,20 +197,70 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 		
 		inputFormPanel.add(clientInputFormPanel, BorderLayout.SOUTH);
 		
-		
 		// Buttons panel
+		JButton acceptButton = new JButton("Aceptar");
+		acceptButton.setActionCommand(ACTION_ACCEPT);
+		acceptButton.addActionListener(actionListener);
 		JButton cancelButton = new JButton("Cancelar");
+		cancelButton.setActionCommand(ACTION_CANCEL);
+		cancelButton.addActionListener(actionListener);
 		
-		JButton addButton = new JButton("Agregar");
-		
-		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 10));
+		buttonsPanel.add(acceptButton);
 		buttonsPanel.add(cancelButton);
-		buttonsPanel.add(addButton);
 		
 		contentPane.add(buttonsPanel, BorderLayout.SOUTH);
 		
 		pack();
 		
+	}
+	
+	@Override 
+	void readInputValues() throws Exception {
+		
+		super.readInputValues();
+		
+		String address = addressTextField.getText().trim();
+		String phoneNumber = phoneTextField.getText().trim().replaceAll("[^\\d]", "" );
+		
+		char academicLevel = ((AcademicLevel) academicLevelComboBox.getSelectedItem()).getValue();
+		char civilStatus = ((CivilStatus) civilStatusComboBox.getSelectedItem()).getValue();
+		byte socialLevel = (byte) ((SocialLevel) socialLevelComboBox.getSelectedItem()).getValue();
+
+		client.setAddress(address);
+		client.setPhone(phoneNumber);
+		client.setAcademicLevel(academicLevel);
+		client.setCivilStatus(civilStatus);
+		client.setSocialLevel(socialLevel);
+		client.setCity(residencyCity);
+	}
+
+	@Override
+	void checkExistingData(String personId) {
+		try {
+			Client preExistingClient = ClientPersistence.loadClient(personId);
+			if (preExistingClient != null) {
+				person = client = preExistingClient;
+				fillFieldsWithData();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	void fillFieldsWithData() {
+		super.fillFieldsWithData();
+		
+		addressTextField.setText(client.getAddress());
+		phoneTextField.setText(client.getPhone());
+		
+		residencyCity = client.getCity();
+		cityTextField.setText(residencyCity.getCity());
+		
+		academicLevelComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(AcademicLevel.values(), client.getAcademicLevel()));
+		civilStatusComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(CivilStatus.values(), client.getCivilStatus()));
+		socialLevelComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(SocialLevel.values(), (char) client.getSocialLevel()));
 	}
 
 }

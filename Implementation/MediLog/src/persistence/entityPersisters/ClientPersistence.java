@@ -81,11 +81,7 @@ public abstract class ClientPersistence {
 	
 	public static void saveClient(Client client) throws SQLException {
 		
-		if (!PersonPersistence.personExists(client.getId())) {
-			// Store the person (superclass) data
-			PersonPersistence.savePerson(client);
-		}
-		
+		PersonPersistence.savePerson(client);
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set query parameters

@@ -1,10 +1,16 @@
 package ui.registration;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -15,18 +21,108 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import character_values.CharacterValueHoldingEnum;
+import character_values.IdentificationType;
+import character_values.SexualGenderType;
+import entities.Location;
+import entities.Person;
+import persistence.entityPersisters.PersonPersistence;
+
 public abstract class AbstractPersonRegistration extends JInternalFrame {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -948578435934734312L;
+
+	private static final String BIRTH_DATE_FORMAT_REGEX = "\\d{2}\\/\\d{2}\\/\\d{4}";
+	
+	private static final String ACTION_SELECT_LOCATION = "ACTION_SELECT_EXPEDITION_LOCATION";
+	
+	private final DateTimeFormatter birthDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	
+	Person person;
 	
 	JPanel contentPane, inputFormPanel;
 
-	JComboBox<Character> identificationTypeComboBox, genderComboBox;
+	private Location idExpeditionCity;
+	
+	private JComboBox<IdentificationType> identificationTypeComboBox;
+	
+	private JComboBox<SexualGenderType> genderComboBox;
+	
+	private JButton selectExpeditionCityButton;
 
-	JTextField identificationNumberTextField, identificationExpeditionCityTextField, firstNameTextField, lastNameTextField, birthdateTextField;
+	private JTextField identificationNumberTextField, identificationExpeditionCityTextField, firstNameTextField, lastNameTextField, birthdateTextField;
+	
+	private LocationSelectionInternalFrame.LocationSelectionListener listener = new LocationSelectionInternalFrame.LocationSelectionListener() {
+		
+		@Override
+		public void onLocationSelected(Location location) {
+			idExpeditionCity = location;
+			identificationExpeditionCityTextField.setText(idExpeditionCity.getCity());
+		}
+	};
+	
+	private ActionListener actionListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+
+			if (event.getActionCommand().equals(ACTION_SELECT_LOCATION)) {
+				JInternalFrame internalFrame = new LocationSelectionInternalFrame(listener);
+				internalFrame.setVisible(true);
+				getDesktopPane().add(internalFrame);
+				internalFrame.toFront();
+			}
+		}
+	};
+	
+	private FocusListener focusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent event) {
+			
+			if (event.getComponent() instanceof JTextField) {
+				JTextField component = (JTextField) event.getComponent();
+				component.setText(component.getText().trim());
+				
+				if (component == identificationNumberTextField && !component.getText().isEmpty()) {
+					
+					String id = component.getText();
+					try {
+						if (PersonPersistence.personExists(id)) {
+							checkExistingData(id);
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		@Override
+		public void focusGained(FocusEvent event) {
+		}
+	};
+	
+	private FocusListener switchOrderFocusListener = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+		}
+		
+		@Override
+		public void focusGained(FocusEvent event) {
+			if (event.getOppositeComponent() == selectExpeditionCityButton) {
+				// Backward switch of focus
+				identificationNumberTextField.grabFocus();
+			} else {
+				// Forward or arbitrary switch of focus
+				selectExpeditionCityButton.grabFocus();
+			}
+		}
+	};
 
 	public AbstractPersonRegistration() {
 
@@ -39,15 +135,23 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 		setContentPane(contentPane);
 		
 		// Initialization of components
-		identificationTypeComboBox = new JComboBox<Character>(new Character[]{'C', 'E'});
+		identificationTypeComboBox = new JComboBox<>(IdentificationType.values());
 		identificationNumberTextField = new JTextField();
+		identificationNumberTextField.addFocusListener(focusListener);
 		identificationExpeditionCityTextField = new JTextField();
 		identificationExpeditionCityTextField.setEditable(false);
-		JButton selectExpeditionCityButton = new JButton("Seleccionar");
+		identificationExpeditionCityTextField.setBackground(Color.WHITE);
+		selectExpeditionCityButton = new JButton("Seleccionar");
+		selectExpeditionCityButton.setActionCommand(ACTION_SELECT_LOCATION);
+		selectExpeditionCityButton.addActionListener(actionListener);
+		
 		firstNameTextField = new JTextField();
+		firstNameTextField.addFocusListener(focusListener);
 		lastNameTextField = new JTextField();
-		genderComboBox = new JComboBox<Character>(new Character[] {'M', 'F'});
+		lastNameTextField.addFocusListener(focusListener);
+		genderComboBox = new JComboBox<>(SexualGenderType.values());
 		birthdateTextField = new JTextField();
+		birthdateTextField.addFocusListener(focusListener);
 		
 		JPanel idTypePanel = new JPanel(new GridLayout(2, 1));
 		idTypePanel.add(new JLabel("Tipo de Identificación", JLabel.CENTER));
@@ -59,24 +163,7 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 		
 		JPanel idExpeditionPanel = new JPanel(new GridLayout(2,1));
 		idExpeditionPanel.add(new JLabel("Ciudad de Expedición", JLabel.CENTER));
-		identificationExpeditionCityTextField.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				// No operation
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (e.getOppositeComponent().equals(selectExpeditionCityButton)) {
-					// Backward switch of focus
-					identificationNumberTextField.grabFocus();
-				} else {
-					// Forward or arbitrary switch of focus
-					selectExpeditionCityButton.grabFocus();
-				}
-			}
-		});
+		identificationExpeditionCityTextField.addFocusListener(switchOrderFocusListener);
 		idExpeditionPanel.add(identificationExpeditionCityTextField);
 		
 		JPanel idExpeditionButtonPanel = new JPanel(new GridLayout(2,1));
@@ -103,9 +190,14 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 		birthdatePanel.add(new JLabel("Fecha de Nacimiento", JLabel.CENTER));
 		birthdatePanel.add(birthdateTextField);
 		
+		JPanel birthdateFormatPanel = new JPanel(new GridLayout(2, 1));
+		birthdateFormatPanel.add(new JLabel("Formato", JLabel.CENTER));
+		birthdateFormatPanel.add(new JLabel("DD/MM/AAAA", JLabel.CENTER));
+		
 		JPanel additionalInfoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		additionalInfoPanel.add(genderPanel);
 		additionalInfoPanel.add(birthdatePanel);
+		additionalInfoPanel.add(birthdateFormatPanel);
 		
 		JPanel personInputFormPanel = new JPanel(new GridLayout(3, 1));
 		personInputFormPanel.add(idInputPanel);
@@ -118,6 +210,48 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 
 		contentPane.add(inputFormPanel, BorderLayout.CENTER);		
 		
+	}
+	
+	void readInputValues() throws Exception {
+		
+		String id = identificationNumberTextField.getText().trim();
+		String name = firstNameTextField.getText().trim();
+		String lastName = lastNameTextField.getText().trim();
+		String birthDateString = birthdateTextField.getText().trim();
+		
+		char identificationType = ((IdentificationType) identificationTypeComboBox.getSelectedItem()).getValue();
+		char sexualGender = ((SexualGenderType) genderComboBox.getSelectedItem()).getValue();
+		
+		if (idExpeditionCity == null)
+			throw new Exception("Por favor seleccione una ciudad de expedición");
+		
+		if (id.isEmpty() || name.isEmpty() || lastName.isEmpty() || birthDateString.isEmpty())
+			throw new Exception("Por favor ingrese todos los datos básicos requeridos");
+		
+		if (!birthDateString.matches(BIRTH_DATE_FORMAT_REGEX))
+			throw new Exception("Por favor revise el formato de la fecha de nacimiento");
+		
+		LocalDate birthDate = LocalDate.parse(birthDateString, birthDateFormatter);
+		
+		person.setId(id);
+		person.setFirstName(name);
+		person.setLastName(lastName);
+		person.setBirthDate(birthDate);
+		person.setIdentificationType(identificationType);
+		person.setGender(sexualGender);
+		person.setIdExpeditionCity(idExpeditionCity);
+	}
+	
+	abstract void checkExistingData(String personId);
+	
+	void fillFieldsWithData() {
+		idExpeditionCity = person.getIdExpeditionCity();
+		identificationExpeditionCityTextField.setText(idExpeditionCity.getCity());
+		firstNameTextField.setText(person.getFirstName());
+		lastNameTextField.setText(person.getLastName());
+		birthdateTextField.setText(birthDateFormatter.format(person.getBirthDate()));
+		identificationTypeComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(IdentificationType.values(), person.getIdentificationType()));
+		genderComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(SexualGenderType.values(), person.getGender()));
 	}
 	
 }

@@ -59,16 +59,18 @@ public abstract class EmployeePersistence {
 	}
 	
 	public static void saveEmployee(Employee employee, String password) throws SQLException {
+		// Save person
+		PersonPersistence.savePerson(employee);
 		// Prevent null pointer exception with password
 		if (password == null)
 			password = "null";
+		byte[] salt = PasswordUtils.getNextSalt();
+		byte[] passwordHash = PasswordUtils.hash(password.toCharArray(), salt);
 		// Create prepared statement with parameterized query
 		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(INSERT_QUERY);
 		// Set query parameters
 		preparedStatement.setString(1, employee.getId());
 		preparedStatement.setInt(2, employee.getRole());
-		byte[] salt = PasswordUtils.getNextSalt();
-		byte[] passwordHash = PasswordUtils.hash(password.toCharArray(), salt);
 		preparedStatement.setBytes(3, salt);
 		preparedStatement.setBytes(4, passwordHash);
 		// Execute query

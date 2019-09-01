@@ -104,7 +104,6 @@ public abstract class PersonPersistence {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		// Go to first and only result record
 		return resultSet.first() && resultSet.getInt(1) == 1;
-		
 	}
 
 }
