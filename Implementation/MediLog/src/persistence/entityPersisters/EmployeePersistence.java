@@ -89,8 +89,7 @@ public abstract class EmployeePersistence {
 			byte[] salt = resultSet.getBytes(1);
 			byte[] passwordHash = resultSet.getBytes(2);
 			return PasswordUtils.isExpectedPassword(password.toCharArray(), salt, passwordHash);
-		} else {
+		} else
 			return false;
-		}
 	}
 }
