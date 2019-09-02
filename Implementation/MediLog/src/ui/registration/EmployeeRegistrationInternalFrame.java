@@ -63,7 +63,7 @@ public class EmployeeRegistrationInternalFrame extends AbstractPersonRegistratio
 		String passwordInput = new String(passwordField.getPassword());
 		String passwordConfirmationInput = new String(passwordConfirmationField.getPassword());
 		
-		if (!passwordInput.isEmpty())
+		if (passwordInput.isEmpty())
 			throw new Exception("Por favor ingrese la contraseña");
 		
 		if (!passwordInput.equals(passwordConfirmationInput))
