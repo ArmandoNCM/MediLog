@@ -1,6 +1,6 @@
 package character_values;
 
-public enum AcademicLevel implements CharacterValueHoldingEnum {
+public enum AcademicLevel implements ValueHoldingEnum {
 	
 	NONE_SELECTED((char) 0, "-"), PRIMARY('B', "Básica"), SECONDARY('S', "Secundaria"), TECHNICAL('T', "Técnica"), PROFESSIONAL('P', "Profesional");
 	

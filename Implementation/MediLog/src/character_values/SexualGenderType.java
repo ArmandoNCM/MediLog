@@ -1,6 +1,6 @@
 package character_values;
 
-public enum SexualGenderType implements CharacterValueHoldingEnum {
+public enum SexualGenderType implements ValueHoldingEnum {
 	
 	MALE('M', "Masculino"), FEMALE('F', "Female");
 

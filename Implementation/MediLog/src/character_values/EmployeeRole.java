@@ -1,14 +1,14 @@
 package character_values;
 
-public enum CivilStatus implements ValueHoldingEnum {
-
-	NONE_SELECTED((char) 0, "-"), SNGLE('S', "Soltero"), MARRIED('M', "Casado"), FREE_UNION('F', "Unión Libre"), WIDOWED('W', "Viudo"), DIVORCED('D', "Divorciado");
+public enum EmployeeRole implements ValueHoldingEnum {
 	
+	ADMINISTRATOR((char) 1, "Administrador"), EMPLOYEE((char) 2, "Empleado");
+
 	private final char value;
 	
 	private final String displayName;
 	
-	private CivilStatus(char value, String displayName) {
+	private EmployeeRole(char value, String displayName) {
 		this.value = value;
 		this.displayName = displayName;
 	}
@@ -22,5 +22,5 @@ public enum CivilStatus implements ValueHoldingEnum {
 	public char getValue() {
 		return value;
 	}
-
+	
 }

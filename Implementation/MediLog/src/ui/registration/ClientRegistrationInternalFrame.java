@@ -16,29 +16,26 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import character_values.AcademicLevel;
-import character_values.CharacterValueHoldingEnum;
+import character_values.ValueHoldingEnum;
 import character_values.CivilStatus;
 import character_values.SocialLevel;
 import entities.Client;
 import entities.Location;
+import entities.Person;
 import persistence.entityPersisters.ClientPersistence;
+import persistence.entityPersisters.EmployeePersistence;
 
 public class ClientRegistrationInternalFrame extends AbstractPersonRegistration {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4968994853618272668L;
+	private static final long serialVersionUID = 8665676767178915188L;
 
-	private static final String ACTION_ACCEPT = "ACTION_ACCEPT";
-	
-	private static final String ACTION_CANCEL = "ACTION_CANCEL";
-	
 	private static final String ACTION_SELECT_LOCATION = "ACTION_SELECT_RESIDENCY_LOCATION";
 	
 	private Client client;
@@ -60,7 +57,10 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 		@Override
 		public void onLocationSelected(Location location) {
 			residencyCity = location;
-			cityTextField.setText(residencyCity.getCity());
+			if (residencyCity != null)
+				cityTextField.setText(residencyCity.getCity());
+			else
+				cityTextField.setText("");
 		}
 	};
 	
@@ -70,22 +70,8 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 		public void actionPerformed(ActionEvent event) {
 
 			switch (event.getActionCommand()) {
-			case ACTION_ACCEPT:
-				
-				try {
-					readInputValues();
-					ClientPersistence.saveClient(client);
-					dispose();
-					JOptionPane.showMessageDialog(getDesktopPane(), "Datos guardados con éxito", "Éxito al guardar", JOptionPane.INFORMATION_MESSAGE);
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(getDesktopPane(), e.getMessage());
-				}
-				break;
-			case ACTION_CANCEL:
-				dispose();
-				break;
 			case ACTION_SELECT_LOCATION:
-				JInternalFrame internalFrame = new LocationSelectionInternalFrame(listener);
+				JInternalFrame internalFrame = new LocationSelectionInternalFrame(listener, true);
 				internalFrame.setVisible(true);
 				getDesktopPane().add(internalFrame);
 				internalFrame.toFront();
@@ -197,20 +183,6 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 		
 		inputFormPanel.add(clientInputFormPanel, BorderLayout.SOUTH);
 		
-		// Buttons panel
-		JButton acceptButton = new JButton("Aceptar");
-		acceptButton.setActionCommand(ACTION_ACCEPT);
-		acceptButton.addActionListener(actionListener);
-		JButton cancelButton = new JButton("Cancelar");
-		cancelButton.setActionCommand(ACTION_CANCEL);
-		cancelButton.addActionListener(actionListener);
-		
-		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 10));
-		buttonsPanel.add(acceptButton);
-		buttonsPanel.add(cancelButton);
-		
-		contentPane.add(buttonsPanel, BorderLayout.SOUTH);
-		
 		pack();
 		
 	}
@@ -221,7 +193,9 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 		super.readInputValues();
 		
 		String address = addressTextField.getText().trim();
+		if (address.isEmpty()) address = null;
 		String phoneNumber = phoneTextField.getText().trim().replaceAll("[^\\d]", "" );
+		if (phoneNumber.isEmpty()) phoneNumber = null;
 		
 		char academicLevel = ((AcademicLevel) academicLevelComboBox.getSelectedItem()).getValue();
 		char civilStatus = ((CivilStatus) civilStatusComboBox.getSelectedItem()).getValue();
@@ -242,6 +216,19 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 			if (preExistingClient != null) {
 				person = client = preExistingClient;
 				fillFieldsWithData();
+			} else {
+				clearFields();
+				Person employee = EmployeePersistence.loadEmployee(personId);
+				if (employee != null) {
+					person.setId(employee.getId());
+					person.setIdentificationType(employee.getIdentificationType());
+					person.setIdExpeditionCity(employee.getIdExpeditionCity());
+					person.setFirstName(employee.getFirstName());
+					person.setLastName(employee.getLastName());
+					person.setBirthDate(employee.getBirthDate());
+					person.setGender(employee.getGender());
+					fillFieldsWithData();
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -252,15 +239,37 @@ public class ClientRegistrationInternalFrame extends AbstractPersonRegistration 
 	void fillFieldsWithData() {
 		super.fillFieldsWithData();
 		
-		addressTextField.setText(client.getAddress());
+		addressTextField.setText(client.getAddress() != null ? client.getAddress() : "");
 		phoneTextField.setText(client.getPhone());
 		
 		residencyCity = client.getCity();
-		cityTextField.setText(residencyCity.getCity());
+		if (residencyCity != null)
+			cityTextField.setText(residencyCity.getCity());
+		else
+			cityTextField.setText("");
 		
-		academicLevelComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(AcademicLevel.values(), client.getAcademicLevel()));
-		civilStatusComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(CivilStatus.values(), client.getCivilStatus()));
-		socialLevelComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(SocialLevel.values(), (char) client.getSocialLevel()));
+		academicLevelComboBox.setSelectedItem(ValueHoldingEnum.getByValue(AcademicLevel.values(), client.getAcademicLevel()));
+		civilStatusComboBox.setSelectedItem(ValueHoldingEnum.getByValue(CivilStatus.values(), client.getCivilStatus()));
+		socialLevelComboBox.setSelectedItem(ValueHoldingEnum.getByValue(SocialLevel.values(), (char) client.getSocialLevel()));
+	}
+
+	@Override
+	void saveData() throws SQLException {
+		ClientPersistence.saveClient(client);
+	}
+	
+	@Override
+	void clearFields() {
+		super.clearFields();
+		
+		person = client = new Client();
+		addressTextField.setText("");
+		residencyCity = null;
+		cityTextField.setText("");
+		phoneTextField.setText("");
+		academicLevelComboBox.setSelectedIndex(0);
+		civilStatusComboBox.setSelectedIndex(0);
+		socialLevelComboBox.setSelectedIndex(0);
 	}
 
 }

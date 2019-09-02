@@ -26,12 +26,14 @@ public class LocationSelectionInternalFrame extends JInternalFrame{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2246229789633631696L;
+	private static final long serialVersionUID = -3162979631222149200L;
 
 	private static final String ACTION_ACCEPT = "ACTION_ACCEPT";
 	
 	private static final String ACTION_CANCEL = "ACTION_CANCEL";
 
+	private static final String ACTION_CLEAR = "ACTION_CLEAR";
+	
 	private LocationSelectionListener locationSelectionListener;
 	
 	private StringComboBoxModel statesProvincesModel, citiesModel;
@@ -72,6 +74,10 @@ public class LocationSelectionInternalFrame extends JInternalFrame{
 				dispose();
 				locationSelectionListener.onLocationSelected(location);
 				break;
+				
+			case ACTION_CLEAR:
+				locationSelectionListener.onLocationSelected(null);
+				
 			case ACTION_CANCEL:
 				dispose();
 			}
@@ -104,7 +110,7 @@ public class LocationSelectionInternalFrame extends JInternalFrame{
 		}
 	};
 	
-	public LocationSelectionInternalFrame(LocationSelectionListener locationSelectionListener) {
+	public LocationSelectionInternalFrame(LocationSelectionListener locationSelectionListener, boolean isClearable) {
 		
 		this.locationSelectionListener = locationSelectionListener;
 		
@@ -156,6 +162,12 @@ public class LocationSelectionInternalFrame extends JInternalFrame{
 		
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 10));
 		buttonsPanel.add(acceptButton);
+		if (isClearable) {
+			JButton clearButton = new JButton("Limpiar");
+			clearButton.setActionCommand(ACTION_CLEAR);
+			clearButton.addActionListener(actionListener);
+			buttonsPanel.add(clearButton);
+		}
 		buttonsPanel.add(cancelButton);
 		
 		contentPane.add(buttonsPanel, BorderLayout.SOUTH);

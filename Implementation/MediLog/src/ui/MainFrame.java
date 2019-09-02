@@ -21,6 +21,7 @@ import ui.exam.PhysicalExamInternalFrame;
 import ui.informed_consent.InformedConsentRegistrationInternalFrame;
 import ui.informed_consent.InformedConsentSelectionInternalFrame;
 import ui.registration.ClientRegistrationInternalFrame;
+import ui.registration.EmployeeRegistrationInternalFrame;
 import ui.work_concept.RetireConceptInternalFrame;
 import ui.work_concept.WorkConceptInternalFrame;
 
@@ -33,8 +34,9 @@ public class MainFrame extends JFrame {
 	
 	private static final String ACTION_REGISTER_CLIENT = "ACTION_REGISTER_CLIENT";
 	
-	private static final String ACTION_REGISTER_INFORMED_CONSENT = "ACTION_REGISTER_INFORMED_CONSENT";
+	private static final String ACTION_REGISTER_EMPLOYEE = "ACTION_REGISTER_EMPLOYEE";
 	
+	private static final String ACTION_REGISTER_INFORMED_CONSENT = "ACTION_REGISTER_INFORMED_CONSENT";
 	
 	private static final String ACTION_REGISTER_PHYSICAL_CHECK = "ACTION_REGISTER_PHYSICAL_CHECK";
 	
@@ -55,6 +57,12 @@ public class MainFrame extends JFrame {
 				
 				case ACTION_REGISTER_CLIENT:
 					internalFrame = new ClientRegistrationInternalFrame();
+					internalFrame.setVisible(true);
+					desktopPane.add(internalFrame);
+					break;
+					
+				case ACTION_REGISTER_EMPLOYEE:
+					internalFrame = new EmployeeRegistrationInternalFrame();
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
 					break;
@@ -124,6 +132,8 @@ public class MainFrame extends JFrame {
 		registryMenu.add(registerClientMenuItem);
 		
 		JMenuItem registerEmployeeMenuItem = new JMenuItem("Registrar empleado");
+		registerEmployeeMenuItem.setActionCommand(ACTION_REGISTER_EMPLOYEE);
+		registerEmployeeMenuItem.addActionListener(actionListener);
 		registryMenu.add(registerEmployeeMenuItem);
 		
 		// Exams

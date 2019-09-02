@@ -1,6 +1,6 @@
 package character_values;
 
-public enum SocialLevel implements CharacterValueHoldingEnum {
+public enum SocialLevel implements ValueHoldingEnum {
 
 	NONE_SELECTED((char) 0), ONE((char) 1), TWO((char) 2), THREE((char) 3), FOUR((char) 4), FIVE((char) 5), SIX((char) 6);
 	

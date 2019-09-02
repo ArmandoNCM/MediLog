@@ -1,6 +1,6 @@
 package character_values;
 
-public enum IdentificationType implements CharacterValueHoldingEnum {
+public enum IdentificationType implements ValueHoldingEnum {
 	
 	ID('C', "Cédula"), FOREIGN_ID('F', "Cédula de extranjería"), PASSPORT('P', "Pasaporte"), ID_CARD('T', "Tarjeta de identidad");
 	

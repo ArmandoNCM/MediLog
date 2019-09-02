@@ -18,10 +18,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import character_values.CharacterValueHoldingEnum;
+import character_values.ValueHoldingEnum;
 import character_values.IdentificationType;
 import character_values.SexualGenderType;
 import entities.Location;
@@ -33,8 +34,12 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -948578435934734312L;
+	private static final long serialVersionUID = 1297574237881233684L;
 
+	private static final String ACTION_ACCEPT = "ACTION_ACCEPT";
+	
+	private static final String ACTION_CANCEL = "ACTION_CANCEL";
+	
 	private static final String BIRTH_DATE_FORMAT_REGEX = "\\d{2}\\/\\d{2}\\/\\d{4}";
 	
 	private static final String ACTION_SELECT_LOCATION = "ACTION_SELECT_EXPEDITION_LOCATION";
@@ -68,12 +73,30 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent event) {
-
-			if (event.getActionCommand().equals(ACTION_SELECT_LOCATION)) {
-				JInternalFrame internalFrame = new LocationSelectionInternalFrame(listener);
-				internalFrame.setVisible(true);
-				getDesktopPane().add(internalFrame);
-				internalFrame.toFront();
+			
+			switch (event.getActionCommand()) {
+				case ACTION_ACCEPT:
+					
+					try {
+						readInputValues();
+						saveData();
+						dispose();
+						JOptionPane.showMessageDialog(getDesktopPane(), "Datos guardados con éxito", "Éxito al guardar", JOptionPane.INFORMATION_MESSAGE);
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(getDesktopPane(), "No se pudo guardar la información", "Error al guardar", JOptionPane.ERROR_MESSAGE);
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(getDesktopPane(), e.getMessage());
+					}
+					break;
+				case ACTION_CANCEL:
+					dispose();
+					break;
+					
+				case ACTION_SELECT_LOCATION:
+					JInternalFrame internalFrame = new LocationSelectionInternalFrame(listener, false);
+					internalFrame.setVisible(true);
+					getDesktopPane().add(internalFrame);
+					internalFrame.toFront();
 			}
 		}
 	};
@@ -87,15 +110,20 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 				JTextField component = (JTextField) event.getComponent();
 				component.setText(component.getText().trim());
 				
-				if (component == identificationNumberTextField && !component.getText().isEmpty()) {
+				if (component == identificationNumberTextField) {
 					
-					String id = component.getText();
-					try {
-						if (PersonPersistence.personExists(id)) {
-							checkExistingData(id);
+					if (component.getText().isEmpty())
+						clearFields();
+					else {
+						String id = component.getText();
+						try {
+							if (PersonPersistence.personExists(id))
+								checkExistingData(id);
+							else
+								clearFields();
+						} catch (SQLException e) {
+							e.printStackTrace();
 						}
-					} catch (SQLException e) {
-						e.printStackTrace();
 					}
 				}
 			}
@@ -208,8 +236,21 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 		inputFormPanel = new JPanel(new BorderLayout());
 		inputFormPanel.add(personInputFormPanel, BorderLayout.NORTH);
 
-		contentPane.add(inputFormPanel, BorderLayout.CENTER);		
+		contentPane.add(inputFormPanel, BorderLayout.CENTER);
 		
+		// Buttons panel
+		JButton acceptButton = new JButton("Aceptar");
+		acceptButton.setActionCommand(ACTION_ACCEPT);
+		acceptButton.addActionListener(actionListener);
+		JButton cancelButton = new JButton("Cancelar");
+		cancelButton.setActionCommand(ACTION_CANCEL);
+		cancelButton.addActionListener(actionListener);
+		
+		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 10));
+		buttonsPanel.add(acceptButton);
+		buttonsPanel.add(cancelButton);
+		
+		contentPane.add(buttonsPanel, BorderLayout.SOUTH);
 	}
 	
 	void readInputValues() throws Exception {
@@ -242,16 +283,28 @@ public abstract class AbstractPersonRegistration extends JInternalFrame {
 		person.setIdExpeditionCity(idExpeditionCity);
 	}
 	
-	abstract void checkExistingData(String personId);
-	
 	void fillFieldsWithData() {
 		idExpeditionCity = person.getIdExpeditionCity();
 		identificationExpeditionCityTextField.setText(idExpeditionCity.getCity());
 		firstNameTextField.setText(person.getFirstName());
 		lastNameTextField.setText(person.getLastName());
 		birthdateTextField.setText(birthDateFormatter.format(person.getBirthDate()));
-		identificationTypeComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(IdentificationType.values(), person.getIdentificationType()));
-		genderComboBox.setSelectedItem(CharacterValueHoldingEnum.getByValue(SexualGenderType.values(), person.getGender()));
+		identificationTypeComboBox.setSelectedItem(ValueHoldingEnum.getByValue(IdentificationType.values(), person.getIdentificationType()));
+		genderComboBox.setSelectedItem(ValueHoldingEnum.getByValue(SexualGenderType.values(), person.getGender()));
 	}
+	
+	void clearFields() {
+		identificationTypeComboBox.setSelectedIndex(0);
+		idExpeditionCity = null;
+		identificationExpeditionCityTextField.setText("");
+		firstNameTextField.setText("");
+		lastNameTextField.setText("");
+		genderComboBox.setSelectedIndex(0);
+		birthdateTextField.setText("");
+	}
+	
+	abstract void checkExistingData(String personId);
+	
+	abstract void saveData() throws SQLException;
 	
 }
