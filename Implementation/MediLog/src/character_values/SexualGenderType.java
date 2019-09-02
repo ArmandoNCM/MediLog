@@ -2,7 +2,7 @@ package character_values;
 
 public enum SexualGenderType implements ValueHoldingEnum {
 	
-	MALE('M', "Masculino"), FEMALE('F', "Female");
+	MALE('M', "Masculino"), FEMALE('F', "Femenino");
 
 	private final char value;
 	
