@@ -2,7 +2,7 @@ package entities;
 
 import java.time.LocalDate;
 
-public abstract class Person {
+public abstract class Person implements Identifiable {
 
 	private String id;
 	
@@ -20,6 +20,7 @@ public abstract class Person {
 	
 	private char gender;
 
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -80,5 +81,9 @@ public abstract class Person {
 
 	public void setGender(char gender) {
 		this.gender = gender;
+	}
+	
+	public String getFullName() {
+		return firstName + " " + lastName;
 	}
 }

@@ -23,7 +23,8 @@ public abstract class InformedConsentPersistence {
 			"    work_in_heights, " + 
 			"    date " + 
 			"FROM informed_consent " + 
-			"WHERE client = ?";
+			"WHERE client = ? " +
+			"ORDER BY date DESC";
 	
 	private static final String SELECT_INFORMED_CONSENT_QUERY = 
 			"SELECT " + 

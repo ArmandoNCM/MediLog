@@ -91,6 +91,8 @@ public class SessionLogInDialog extends JDialog {
 		
 		idField = new JTextField();
 		passwordField = new JPasswordField();
+		passwordField.setActionCommand(ACTION_ACCEPT);
+		passwordField.addActionListener(actionListener);
 		
 		inputPanel.add(new JLabel("ID"));
 		inputPanel.add(idField);
@@ -126,7 +128,7 @@ public class SessionLogInDialog extends JDialog {
 			Employee employee = EmployeePersistence.loadEmployee(id);
 		
 			if (employee == null)
-				throw new Exception("The ID is not registered");
+				throw new Exception("El ID no esta registrado en el sistema");
 			
 			if (EmployeePersistence.confirmIdentity(id, password)) {
 				SessionHelper.getInstance().setEmployee(employee);

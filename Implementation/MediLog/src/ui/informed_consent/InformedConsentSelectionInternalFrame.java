@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -16,6 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 import entities.Client;
 import entities.InformedConsent;
 import persistence.entityPersisters.ClientPersistence;
@@ -26,7 +30,7 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3758136228340222828L;
+	private static final long serialVersionUID = -4774525022423665973L;
 
 	private static final String ACTION_SEARCH = "ACTION_SEARCH";
 	
@@ -36,7 +40,7 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 
 	private JTable informedConsentsTable;
 	private InformedConsentTableModel informedConsentTableModel = new InformedConsentTableModel();
-	private JTextField patiendIdField;
+	private JTextField idField;
 	
 	private SelectionListener selectionListener;
 
@@ -48,7 +52,7 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 			switch (event.getActionCommand()) {
 			case ACTION_SEARCH:
 				
-				String patientIdInput = patiendIdField.getText();
+				String patientIdInput = idField.getText();
 				if (patientIdInput != null && patientIdInput.trim().length() > 0) {
 					patientIdInput = patientIdInput.trim();
 					
@@ -58,13 +62,18 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 							List<InformedConsent> informedConsents = InformedConsentPersistence.loadClientInformedConsents(client);
 							informedConsentTableModel.setItems(informedConsents);
 							informedConsentTableModel.fireTableDataChanged();
-							pack();
+						} else {
+							JOptionPane.showMessageDialog(getDesktopPane(), "El ID no se encuentra registrado en el sistema");
+							informedConsentTableModel.setItems(new ArrayList<>());
+							informedConsentTableModel.fireTableDataChanged();
 						}
 						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					
+				} else {
+					JOptionPane.showMessageDialog(getDesktopPane(), "Por favor ingrese el ID del paciente");
 				}
 				
 				break;
@@ -98,17 +107,19 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 		setIconifiable(true);
 		
 		JPanel contentPane = new JPanel(new BorderLayout(50, 5));
+		contentPane.setBorder(BorderFactory.createTitledBorder("Búsqueda de Consentimiento Informado"));
 		setContentPane(contentPane);
 		
-		JLabel patientIdLabel = new JLabel("Identificación del paciente");
-		patiendIdField = new JTextField();
+		idField = new JTextField();
+		idField.setActionCommand(ACTION_SEARCH);
+		idField.addActionListener(actionListener);
 		JButton searchByPatientButton = new JButton("Buscar");
 		searchByPatientButton.setActionCommand(ACTION_SEARCH);
 		searchByPatientButton.addActionListener(actionListener);
 		
 		JPanel searchBarPanel = new JPanel(new GridLayout(1, 3, 20, 20));
-		searchBarPanel.add(patientIdLabel);
-		searchBarPanel.add(patiendIdField);
+		searchBarPanel.add(new JLabel("Identificación del paciente"));
+		searchBarPanel.add(idField);
 		searchBarPanel.add(searchByPatientButton);
 		
 		contentPane.add(searchBarPanel, BorderLayout.NORTH);
@@ -116,6 +127,17 @@ public class InformedConsentSelectionInternalFrame extends JInternalFrame {
 		informedConsentsTable = new JTable(informedConsentTableModel);
 		informedConsentsTable.setFillsViewportHeight(true);
 		informedConsentsTable.setRowSelectionAllowed(true);
+		
+		TableColumnModel columnModel = informedConsentsTable.getColumnModel();
+		TableColumn column;
+		for (int i = 0; i < InformedConsentTableModel.NUMBER_OF_COLUMNS; i++) {
+			column = columnModel.getColumn(i);
+			
+			if (i == 1)
+				column.setPreferredWidth(300);
+			else
+				column.setPreferredWidth(200);
+		}
 		
 		JScrollPane scrollPane = new JScrollPane(informedConsentsTable);
 		

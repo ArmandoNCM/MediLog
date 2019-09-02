@@ -2,7 +2,7 @@ package entities;
 
 import java.util.List;
 
-public class Company {
+public class Company implements Identifiable {
 
 	private String id;
 	
@@ -10,6 +10,7 @@ public class Company {
 	
 	private List<ContactInformation> contactInformationEntries;
 
+	@Override
 	public String getId() {
 		return id;
 	}

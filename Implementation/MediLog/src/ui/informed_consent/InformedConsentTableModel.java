@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import character_values.ExamType;
+import character_values.ValueHoldingEnum;
 import entities.InformedConsent;
 
 public class InformedConsentTableModel extends AbstractTableModel {
@@ -15,7 +17,7 @@ public class InformedConsentTableModel extends AbstractTableModel {
 	 */
 	private static final long serialVersionUID = -6792925301483258103L;
 
-	private static final int NUMBER_OF_COLUMNS = 5;
+	public static final int NUMBER_OF_COLUMNS = 6;
 	
 	private final List<InformedConsent> items = new ArrayList<InformedConsent>();
 	
@@ -48,12 +50,14 @@ public class InformedConsentTableModel extends AbstractTableModel {
 			case 0:
 				return consent.getId();
 			case 1:
-				return consent.getClientId();
+				return consent.getEmployee().getFullName();
 			case 2:
-				return consent.getClient().getFirstName();
+				return ValueHoldingEnum.getByValue(ExamType.values(), consent.getCheckType());
 			case 3:
-				return consent.getClient().getLastName();
+				return consent.isWorkInHeights() ? "Aplica" : "No Aplica";
 			case 4:
+				return consent.getContractingCompany() != null ? consent.getContractingCompany().getName() : "No Aplica";
+			case 5:
 				return consent.getDate();
 			
 		}
@@ -68,12 +72,14 @@ public class InformedConsentTableModel extends AbstractTableModel {
 			case 0:
 				return "ID";
 			case 1:
-				return "Cliente";
+				return "Empleado";
 			case 2:
-				return "Nombre";
+				return "Tipo de Examen";
 			case 3:
-				return "Apellido";
+				return "Trabajo en Alturas";
 			case 4:
+				return "Empresa";
+			case 5:
 				return "Fecha";
 		}
 		
