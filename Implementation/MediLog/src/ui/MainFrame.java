@@ -43,8 +43,8 @@ public class MainFrame extends JFrame implements SessionLogInListener {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -5620602976525288429L;
+
 	private static final String ACTION_REGISTER_CLIENT = "ACTION_REGISTER_CLIENT";
 	
 	private static final String ACTION_REGISTER_EMPLOYEE = "ACTION_REGISTER_EMPLOYEE";
@@ -164,15 +164,15 @@ public class MainFrame extends JFrame implements SessionLogInListener {
 		physicalExamMenuItem.setActionCommand(ACTION_REGISTER_PHYSICAL_CHECK);
 		physicalExamMenuItem.addActionListener(actionListener);
 		
-		JMenuItem workConceptMenuItem = new JMenuItem("Examen de ingreso");
-		examsMenu.add(workConceptMenuItem);
-		workConceptMenuItem.setActionCommand(ACTION_REGISTER_WORK_CONCEPT);
-		workConceptMenuItem.addActionListener(actionListener);
-		
-		JMenuItem periodicConceptMenuItem = new JMenuItem("Examen de egreso");
-		examsMenu.add(periodicConceptMenuItem);
-		periodicConceptMenuItem.setActionCommand(ACTION_REGISTER_RETIRE_CONCEPT);
-		periodicConceptMenuItem.addActionListener(actionListener);
+//		JMenuItem workConceptMenuItem = new JMenuItem("Examen de ingreso");
+//		examsMenu.add(workConceptMenuItem);
+//		workConceptMenuItem.setActionCommand(ACTION_REGISTER_WORK_CONCEPT);
+//		workConceptMenuItem.addActionListener(actionListener);
+//		
+//		JMenuItem periodicConceptMenuItem = new JMenuItem("Examen de egreso");
+//		examsMenu.add(periodicConceptMenuItem);
+//		periodicConceptMenuItem.setActionCommand(ACTION_REGISTER_RETIRE_CONCEPT);
+//		periodicConceptMenuItem.addActionListener(actionListener);
 		
 		desktopPane = new JDesktopPane();
 		desktopPane.setBorder(BorderFactory.createTitledBorder("SAO S.A.S."));
