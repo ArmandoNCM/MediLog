@@ -47,4 +47,9 @@ public class PostExamAction implements IntegerIdentifiable, TypeClassified {
 		this.observations = observations;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s - %s", getType(), getName());
+	}
+	
 }

@@ -25,6 +25,10 @@ public abstract class PostExamActionPersistence {
 			"FROM post_exam_action " +
 			"WHERE type = ?";
 	
+	private static final String SELECT_POST_EXAM_ACTION_TYPES_QUERY =
+			"SELECT DISTINCT(type) " + 
+			"FROM post_exam_action";
+	
 	private static final String SELECT_APTITUDE_CONCEPT_POST_EXAM_ACTIONS_QUERY = 
 			"SELECT " + 
 			"    post_exam_action.id_post_exam_action, " + 
@@ -137,4 +141,19 @@ public abstract class PostExamActionPersistence {
 		preparedStatement.executeBatch();
 	}
 	
+	public static List<String> loadMedicalAnomalyTypes() throws SQLException {
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_POST_EXAM_ACTION_TYPES_QUERY);
+		
+		// Execute query
+		ResultSet resultSet = preparedStatement.executeQuery();
+		
+		List<String> types = new ArrayList<>();
+		// Check results
+		while (resultSet.next()) {
+			// Retrieve data
+			String type = resultSet.getString(1);
+			types.add(type);
+		}
+		return types;
+	}
 }

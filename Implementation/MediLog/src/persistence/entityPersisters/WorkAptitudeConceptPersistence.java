@@ -87,6 +87,7 @@ public abstract class WorkAptitudeConceptPersistence {
 			concept.setConceptObservations(conceptObservations);
 			concept.setPsychotechnicTest(psychotechnicTest);
 			concept.setRecommendations(recommendations);
+			concept.setPostExamActions(PostExamActionPersistence.loadAptitudeConceptPostExamActions(concept.getId()));
 			
 			return concept;
 		}

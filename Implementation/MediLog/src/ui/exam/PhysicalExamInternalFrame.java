@@ -23,6 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import character_values.Handedness;
+import character_values.ValueHoldingEnum;
 import entities.InformedConsent;
 import entities.MedicalAnomaly;
 import entities.PhysicalCheck;
@@ -54,7 +56,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame implements Generic
 	private JTextField weightTextField, heightTextField, pulseTextField, tempeTextField, respiratoryFTextField, bloodPressureStandingField, bloodPressureLayingDownField;
 	
 	private JTextArea diagnosticsText, recomendationsText, conclusionsText;
-	private JComboBox<String> handednessComboBox;
+	private JComboBox<Handedness> handednessComboBox;
 	
 	private Comparator<MedicalAnomaly> comparator = new Comparator<MedicalAnomaly>() {
 		
@@ -137,7 +139,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame implements Generic
 		respiratoryFTextField = new JTextField();
 		bloodPressureStandingField = new JTextField();
 		bloodPressureLayingDownField = new JTextField();
-		handednessComboBox = new JComboBox<> (new String[] {"Diestro", "Zurdo", "Ambidiestro"});
+		handednessComboBox = new JComboBox<> (Handedness.values());
 		
 		diagnosticsText = new JTextArea();
         diagnosticsText.setColumns(40);
@@ -267,27 +269,14 @@ public class PhysicalExamInternalFrame extends JInternalFrame implements Generic
 			respiratoryFTextField.setText(String.valueOf(physicalCheck.getRespiratoryFrequencyPerMinute()));
 			bloodPressureStandingField.setText(String.valueOf(physicalCheck.getBloodPressureStanding()));
 			bloodPressureLayingDownField.setText(String.valueOf(physicalCheck.getBloodPressureLayingDown()));
-			diagnosticsText.setText(String.valueOf(physicalCheck.getDiagnostics()));
-			conclusionsText.setText(String.valueOf(physicalCheck.getConclusions()));
-			recomendationsText.setText(String.valueOf(physicalCheck.getRecommendations()));
-			
-			switch (physicalCheck.getHandedness()) {
-				case 'R':
-					handednessComboBox.setSelectedIndex(0);
-					break;
-				case 'L':
-					handednessComboBox.setSelectedIndex(1);
-					break;
-				case 'A':
-					handednessComboBox.setSelectedIndex(2);
-					break;
-			}
+			diagnosticsText.setText(physicalCheck.getDiagnostics() != null ? String.valueOf(physicalCheck.getDiagnostics()) : "");
+			conclusionsText.setText(physicalCheck.getConclusions() != null ? String.valueOf(physicalCheck.getConclusions()) : "");
+			recomendationsText.setText(physicalCheck.getRecommendations() != null ? String.valueOf(physicalCheck.getRecommendations()) : "");
+
+			handednessComboBox.setSelectedItem(ValueHoldingEnum.getByValue(Handedness.values(), physicalCheck.getHandedness()));
 			
 			selectedMedicalAnomalies = physicalCheck.getMedicalAnomalies();
-			
-			if (selectedMedicalAnomalies.size() > 0) {
-				medicalAnomaliesListModel.setItems(selectedMedicalAnomalies);
-			}
+			medicalAnomaliesListModel.setItems(selectedMedicalAnomalies);
 			
 		} else
 			physicalCheck = new PhysicalCheck(informedConsent);
@@ -306,16 +295,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame implements Generic
 			String diagnostics = diagnosticsText.getText().trim().length() > 0 ? diagnosticsText.getText() : null;
 			String conclusions = conclusionsText.getText().trim().length() > 0 ? conclusionsText.getText() : null;
 			String recommendations = recomendationsText.getText().trim().length() > 0 ? recomendationsText.getText() : null;
-			
-			char handedness = ' ';
-			switch (handednessComboBox.getSelectedIndex()) {
-				case 0:
-					handedness = 'R';
-				case 1:
-					handedness = 'L';
-				case 2:
-					handedness = 'A';
-			}
+			char handedness = ((Handedness) handednessComboBox.getSelectedItem()).getValue();
 			
 			physicalCheck.setWeightKilograms(weight);
 			physicalCheck.setHeightCentimeters(height);

@@ -104,7 +104,16 @@ public class MainFrame extends JFrame implements SessionLogInListener {
 					break;
 					
 				case ACTION_REGISTER_WORK_APTITUDE_CONCEPT:
-					internalFrame = new WorkConceptInternalFrame();;
+					internalFrame = new InformedConsentSelectionInternalFrame(new InformedConsentSelectionInternalFrame.SelectionListener() {
+						
+						@Override
+						public void onInformedConsentSelected(InformedConsent informedConsent) {
+
+							JInternalFrame workConceptInternalFrame = new WorkConceptInternalFrame(informedConsent);
+							workConceptInternalFrame.setVisible(true);
+							desktopPane.add(workConceptInternalFrame);
+						}
+					});
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
 					break;
@@ -157,7 +166,7 @@ public class MainFrame extends JFrame implements SessionLogInListener {
 		physicalExamMenuItem.setActionCommand(ACTION_REGISTER_PHYSICAL_CHECK);
 		physicalExamMenuItem.addActionListener(actionListener);
 		
-		JMenuItem workConceptMenuItem = new JMenuItem("Examen de ingreso");
+		JMenuItem workConceptMenuItem = new JMenuItem("Concepto de Aptitud");
 		examsMenu.add(workConceptMenuItem);
 		workConceptMenuItem.setActionCommand(ACTION_REGISTER_WORK_APTITUDE_CONCEPT);
 		workConceptMenuItem.addActionListener(actionListener);
