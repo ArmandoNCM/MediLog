@@ -18,6 +18,13 @@ public abstract class PostExamActionPersistence {
 			"    type " + 
 			"FROM post_exam_action";
 	
+	private static final String SELECT_POST_EXAM_ACTIONS_BY_TYPE_QUERY = 
+			"SELECT " + 
+			"    id_post_exam_action, " + 
+			"    name " + 
+			"FROM post_exam_action " +
+			"WHERE type = ?";
+	
 	private static final String SELECT_APTITUDE_CONCEPT_POST_EXAM_ACTIONS_QUERY = 
 			"SELECT " + 
 			"    post_exam_action.id_post_exam_action, " + 
@@ -52,6 +59,30 @@ public abstract class PostExamActionPersistence {
 			int actionId = resultSet.getInt(1);
 			String name = resultSet.getString(2);
 			String type = resultSet.getString(3);
+			// Instantiate PostExamAction object
+			PostExamAction postExamAction = new PostExamAction();
+			postExamAction.setId(actionId);
+			postExamAction.setName(name);
+			postExamAction.setType(type);
+			// Add to list
+			actions.add(postExamAction);
+		}
+		return actions;
+	}
+	
+	public static List<PostExamAction> loadPostExamActionsByType(String type) throws SQLException {
+		// Create prepared statement
+		PreparedStatement preparedStatement = Database.getInstance().getConnection().prepareStatement(SELECT_POST_EXAM_ACTIONS_BY_TYPE_QUERY);
+		// Set parameters
+		preparedStatement.setString(1, type);
+		// Execute query
+		ResultSet resultSet = preparedStatement.executeQuery();
+		// Iterate over results
+		List<PostExamAction> actions = new ArrayList<PostExamAction>();
+		while (resultSet.next()) {
+			// Retrieve results
+			int actionId = resultSet.getInt(1);
+			String name = resultSet.getString(2);
 			// Instantiate PostExamAction object
 			PostExamAction postExamAction = new PostExamAction();
 			postExamAction.setId(actionId);

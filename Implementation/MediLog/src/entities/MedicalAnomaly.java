@@ -1,6 +1,9 @@
 package entities;
 
-public class MedicalAnomaly {
+import contracts.IntegerIdentifiable;
+import contracts.TypeClassified;
+
+public class MedicalAnomaly implements IntegerIdentifiable, TypeClassified{
 	
 	private int id;
 	
@@ -10,6 +13,7 @@ public class MedicalAnomaly {
 	
 	private String observations;
 
+	@Override
 	public int getId() {
 		return id;
 	}
@@ -26,6 +30,7 @@ public class MedicalAnomaly {
 		this.name = name;
 	}
 	
+	@Override
 	public String getType() {
 		return type;
 	}

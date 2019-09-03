@@ -1,7 +1,7 @@
 package ui.informed_consent;
 
-import entities.Identifiable;
+import contracts.StringIdentifiable;
 
 interface IdentifiableSelectionListener {
-	void onSelected(Identifiable identifiable, PartSelectionMode selectionMode);
+	void onSelected(StringIdentifiable identifiable, PartSelectionMode selectionMode);
 }

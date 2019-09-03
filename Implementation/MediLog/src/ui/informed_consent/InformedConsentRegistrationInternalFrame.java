@@ -24,9 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import character_values.ExamType;
+import contracts.StringIdentifiable;
 import entities.Client;
 import entities.Company;
-import entities.Identifiable;
 import entities.InformedConsent;
 import persistence.entityPersisters.InformedConsentPersistence;
 import session.SessionHelper;
@@ -205,7 +205,7 @@ public class InformedConsentRegistrationInternalFrame extends JInternalFrame imp
 	}
 
 	@Override
-	public void onSelected(Identifiable identifiable, PartSelectionMode selectionMode) {
+	public void onSelected(StringIdentifiable identifiable, PartSelectionMode selectionMode) {
 
 		if (selectionMode == PartSelectionMode.CLIENT_SELECTION)
 			client = (Client) identifiable;

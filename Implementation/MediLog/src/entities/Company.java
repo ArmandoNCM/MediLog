@@ -2,7 +2,9 @@ package entities;
 
 import java.util.List;
 
-public class Company implements Identifiable {
+import contracts.StringIdentifiable;
+
+public class Company implements StringIdentifiable {
 
 	private String id;
 	

@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import entities.Identifiable;
+import contracts.StringIdentifiable;
 import persistence.entityPersisters.ClientPersistence;
 import persistence.entityPersisters.CompanyPersistence;
 
@@ -106,7 +106,7 @@ public class PartSelectionDialog extends JDialog {
 		
 		try {
 			
-			Identifiable identifiable;
+			StringIdentifiable identifiable;
 			
 			if (selectionMode == PartSelectionMode.CLIENT_SELECTION)
 				identifiable = ClientPersistence.loadClient(id);

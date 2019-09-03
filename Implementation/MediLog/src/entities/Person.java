@@ -2,7 +2,9 @@ package entities;
 
 import java.time.LocalDate;
 
-public abstract class Person implements Identifiable {
+import contracts.StringIdentifiable;
+
+public abstract class Person implements StringIdentifiable {
 
 	private String id;
 	

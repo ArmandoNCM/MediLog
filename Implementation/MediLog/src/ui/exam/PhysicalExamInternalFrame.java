@@ -28,9 +28,17 @@ import entities.MedicalAnomaly;
 import entities.PhysicalCheck;
 import persistence.entityPersisters.MedicalAnomalyPersistence;
 import persistence.entityPersisters.PhysicalCheckPersistence;
+import ui.generic_bicolumn_selection.GenericSelectionInternalFrame;
+import ui.generic_bicolumn_selection.GenericSelectionListModel;
+import ui.generic_bicolumn_selection.GenericSelectionListener;
 
-public class PhysicalExamInternalFrame extends JInternalFrame {
+public class PhysicalExamInternalFrame extends JInternalFrame implements GenericSelectionListener<MedicalAnomaly> {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6590336491802990613L;
+
 	private static final String ACTION_ACCEPT = "ACTION_ACCEPT";
 	
 	private static final String ACTION_CANCEL = "ACTION_CANCEL";
@@ -41,9 +49,8 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 	
 	private List<MedicalAnomaly> selectedMedicalAnomalies = new ArrayList<MedicalAnomaly>();
 	
-	private MedicalAnomalyListModel medicalAnomaliesListModel = new MedicalAnomalyListModel();
+	private GenericSelectionListModel<MedicalAnomaly> medicalAnomaliesListModel = new GenericSelectionListModel<>();
 	
-	private static final long serialVersionUID = 1L;
 	private JTextField weightTextField, heightTextField, pulseTextField, tempeTextField, respiratoryFTextField, bloodPressureStandingField, bloodPressureLayingDownField;
 	
 	private JTextArea diagnosticsText, recomendationsText, conclusionsText;
@@ -64,28 +71,20 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 
 			String type = event.getActionCommand();
 			
-			AddMedicalAnomaliesInternalFrame addMedicalAnomaliesInternalFrame =  new AddMedicalAnomaliesInternalFrame(type, selectedMedicalAnomalies, new AddMedicalAnomaliesInternalFrame.MedicalAnomaliesSelectionListener() {
+			try {
+
+				List<MedicalAnomaly> availableAnomalies = MedicalAnomalyPersistence.loadMedicalAnomaliesByType(type);
+			
+				GenericSelectionInternalFrame<MedicalAnomaly> selectionScreen =  new GenericSelectionInternalFrame<>(type, availableAnomalies, selectedMedicalAnomalies, PhysicalExamInternalFrame.this);
 				
-				@Override
-				public void onMedicalAnomaliesSelected(String medicalAnomalyType, List<MedicalAnomaly> selectedAnomalies) {
-					
-					List<MedicalAnomaly> anomaliesToRemove = new ArrayList<MedicalAnomaly>();
-					for (MedicalAnomaly anomaly : selectedMedicalAnomalies) {
-						if (anomaly.getType().equals(medicalAnomalyType))
-							anomaliesToRemove.add(anomaly);
-					}
-					selectedMedicalAnomalies.removeAll(anomaliesToRemove);
-					
-					selectedMedicalAnomalies.addAll(selectedAnomalies);
-					
-					selectedMedicalAnomalies.sort(comparator);
-					
-					medicalAnomaliesListModel.setAnomalies(selectedMedicalAnomalies);
-				}
-			});
-			addMedicalAnomaliesInternalFrame.setVisible(true);
-			getDesktopPane().add(addMedicalAnomaliesInternalFrame);
-			addMedicalAnomaliesInternalFrame.toFront();
+				selectionScreen.setVisible(true);
+				getDesktopPane().add(selectionScreen);
+				selectionScreen.toFront();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(getDesktopPane(), "Ha ocurrido un error al cargar las anomalías médicas", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 			
 		}
 	};
@@ -287,7 +286,7 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 			selectedMedicalAnomalies = physicalCheck.getMedicalAnomalies();
 			
 			if (selectedMedicalAnomalies.size() > 0) {
-				medicalAnomaliesListModel.setAnomalies(selectedMedicalAnomalies);
+				medicalAnomaliesListModel.setItems(selectedMedicalAnomalies);
 			}
 			
 		} else
@@ -335,6 +334,23 @@ public class PhysicalExamInternalFrame extends JInternalFrame {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(getDesktopPane(), "Revise los valores ingresados", "Error de formato", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	@Override
+	public void onItemsSelected(String type, List<MedicalAnomaly> selectedItems) {
+
+		List<MedicalAnomaly> anomaliesToRemove = new ArrayList<MedicalAnomaly>();
+		for (MedicalAnomaly anomaly : selectedMedicalAnomalies) {
+			if (anomaly.getType().equals(type))
+				anomaliesToRemove.add(anomaly);
+		}
+		selectedMedicalAnomalies.removeAll(anomaliesToRemove);
+		
+		selectedMedicalAnomalies.addAll(selectedItems);
+		
+		selectedMedicalAnomalies.sort(comparator);
+		
+		medicalAnomaliesListModel.setItems(selectedMedicalAnomalies);
 	}
 
 }
