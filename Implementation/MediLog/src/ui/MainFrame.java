@@ -74,18 +74,21 @@ public class MainFrame extends JFrame implements SessionLogInListener {
 					internalFrame = new ClientRegistrationInternalFrame();
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
+					internalFrame.toFront();
 					break;
 					
 				case ACTION_REGISTER_EMPLOYEE:
 					internalFrame = new EmployeeRegistrationInternalFrame();
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
+					internalFrame.toFront();
 					break;
 	
 				case ACTION_REGISTER_INFORMED_CONSENT:
 					internalFrame = new InformedConsentRegistrationInternalFrame();
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
+					internalFrame.toFront();
 					break;
 					
 				case ACTION_REGISTER_PHYSICAL_CHECK:
@@ -101,6 +104,7 @@ public class MainFrame extends JFrame implements SessionLogInListener {
 					});
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
+					internalFrame.toFront();
 					break;
 					
 				case ACTION_REGISTER_WORK_APTITUDE_CONCEPT:
@@ -116,6 +120,7 @@ public class MainFrame extends JFrame implements SessionLogInListener {
 					});
 					internalFrame.setVisible(true);
 					desktopPane.add(internalFrame);
+					internalFrame.toFront();
 					break;
 					
 			}
